@@ -70,3 +70,5 @@ Voy a construir DevPath usando las herramientas que he trabajado en clase: ASP.N
 ---
 
 ## 5. Diagrama
+
+![Diagrama del sistema](./Captura%20de%20pantalla%202026-05-15%20203304.png)
