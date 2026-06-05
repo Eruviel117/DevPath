@@ -74,7 +74,25 @@ La regla que se respeta: **las dependencias apuntan hacia abajo**. Los Controlle
 
 Las cuatro vistas arquitectónicas de DevPath (lógica, desarrollo, procesos y despliegue) están documentadas en:
 
-```
 
 
-```
+##Diagrama Vista Logiga 
+
+
+<img width="910" height="510" alt="Vista_Logica" src="https://github.com/user-attachments/assets/1db8ca66-f5ee-4bd8-8be7-0bce5abdc499" />
+
+
+
+## Vista de despliegue
+
+
+<img width="797" height="604" alt="Vista_Despliegue" src="https://github.com/user-attachments/assets/a3a4a7f1-f3e1-45fb-b55a-33c058e4662f" />
+
+
+
+##Vista de procesos 
+
+<img width="804" height="730" alt="Vista_de_Procesos" src="https://github.com/user-attachments/assets/c8e9e0ba-1358-46f8-842b-a6805cc92319" />
+
+
+
