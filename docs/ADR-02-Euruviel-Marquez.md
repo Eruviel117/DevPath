@@ -76,10 +76,106 @@ Las cuatro vistas arquitectónicas de DevPath (lógica, desarrollo, procesos y d
 
 
 
-##Diagrama Vista Logiga 
+##  Diagrama Vista Logiga 
 
 
 <img width="910" height="510" alt="Vista_Logica" src="https://github.com/user-attachments/assets/1db8ca66-f5ee-4bd8-8be7-0bce5abdc499" />
+
+##  Vista física
+
+```
+
+DevPath/
+│
+├── Controllers/
+│   ├── AreaController.cs
+│   ├── HabilidadController.cs
+│   ├── RecursoController.cs
+│   ├── RegistroController.cs
+│   ├── EstadisticasController.cs
+│   └── HomeController.cs
+│
+├── Models/
+│   ├── Area.cs
+│   ├── Habilidad.cs
+│   ├── Recurso.cs
+│   ├── Registro.cs
+│   ├── DevPathContext.cs
+│   └── ErrorViewModel.cs
+│
+├── Views/
+│   ├── Area/
+│   │   ├── Index.cshtml
+│   │   ├── Create.cshtml
+│   │   ├── Edit.cshtml
+│   │   ├── Details.cshtml
+│   │   └── Delete.cshtml
+│   │
+│   ├── Habilidad/
+│   │   ├── Index.cshtml
+│   │   ├── Create.cshtml
+│   │   ├── Edit.cshtml
+│   │   ├── Details.cshtml
+│   │   └── Delete.cshtml
+│   │
+│   ├── Recurso/
+│   │   ├── Index.cshtml
+│   │   ├── Create.cshtml
+│   │   ├── Edit.cshtml
+│   │   ├── Details.cshtml
+│   │   └── Delete.cshtml
+│   │
+│   ├── Registro/
+│   │   ├── Index.cshtml
+│   │   ├── Create.cshtml
+│   │   ├── Edit.cshtml
+│   │   ├── Details.cshtml
+│   │   └── Delete.cshtml
+│   │
+│   ├── Estadisticas/
+│   │   └── Index.cshtml
+│   │
+│   ├── Home/
+│   │   ├── Index.cshtml
+│   │   └── Privacy.cshtml
+│   │
+│   └── Shared/
+│       ├── _Layout.cshtml
+│       ├── _Layout.cshtml.css
+│       ├── _ValidationScriptsPartial.cshtml
+│       └── Error.cshtml
+│
+├── Migrations/
+│   ├── 20260602004320_InitialCreate.cs
+│   ├── 20260602004320_InitialCreate.Designer.cs
+│   └── DevPathContextModelSnapshot.cs
+│
+├── wwwroot/
+│   ├── css/
+│   │   └── site.css
+│   ├── js/
+│   │   └── site.js
+│   └── lib/
+│       ├── bootstrap/
+│       ├── jquery/
+│       └── jquery-validation/
+│
+├── docs/
+│   ├── ADR-01-Euruviel-Marquez.md
+│   └── DevPath-C4-Expo.drawio
+│
+├── Properties/
+│   └── launchSettings.json
+│
+├── Program.cs
+├── appsettings.json
+├── appsettings.Development.json
+├── DevPath.csproj
+├── DevPath.sln
+└── .gitignore
+
+```
+
 
 
 
@@ -90,7 +186,7 @@ Las cuatro vistas arquitectónicas de DevPath (lógica, desarrollo, procesos y d
 
 
 
-##Vista de procesos 
+##  Vista de procesos 
 
 <img width="804" height="730" alt="Vista_de_Procesos" src="https://github.com/user-attachments/assets/c8e9e0ba-1358-46f8-842b-a6805cc92319" />
 
