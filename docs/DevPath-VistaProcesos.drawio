@@ -1,0 +1,157 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="gy0c_V2glhM-b4BcgbP2" name="Página-1">
+    <mxGraphModel dx="1414" dy="789" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t1" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1;fontColor=#1A237E;align=left;" value="Vista de Procesos — Crear una Habilidad en un Área" vertex="1">
+          <mxGeometry height="26" width="700" x="60" y="24" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#444444;align=left;whiteSpace=wrap;" value="Muestra el comportamiento en ejecución del caso de uso más representativo: registrar una nueva habilidad dentro de un área." vertex="1">
+          <mxGeometry height="22" width="800" x="60" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;fontColor=#888888;align=left;" value="Euruviel Marquez · DevPath&amp;nbsp;" vertex="1">
+          <mxGeometry height="18" width="500" x="60" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="head_u" parent="1" style="shape=mxgraph.flowchart.start_2;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="112" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="body_u" parent="1" style="shape=mxgraph.basic.person;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="100" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_u" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;align=center;" value="Usuario" vertex="1">
+          <mxGeometry height="20" width="60" x="95" y="182" as="geometry" />
+        </mxCell>
+        <mxCell id="box_c" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="HabilidadController&#xa;[ASP.NET Core MVC]" vertex="1">
+          <mxGeometry height="60" width="200" x="330" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="box_db" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="SQL Server&#xa;[DevPathContext · EF Core]" vertex="1">
+          <mxGeometry height="60" width="200" x="650" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_u" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#888888;dashed=1;endArrow=none;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="125" y="202" as="sourcePoint" />
+            <mxPoint x="125" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_c" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#888888;dashed=1;endArrow=none;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="168" as="sourcePoint" />
+            <mxPoint x="430" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll_db" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#888888;dashed=1;endArrow=none;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="168" as="sourcePoint" />
+            <mxPoint x="750" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s1_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="1.  GET /Habilidad/Crear?areaId={id}" vertex="1">
+          <mxGeometry height="20" width="290" x="130" y="228" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="125" y="248" as="sourcePoint" />
+            <mxPoint x="430" y="248" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s2_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="2.  SELECT * FROM Areas" vertex="1">
+          <mxGeometry height="20" width="290" x="440" y="278" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="298" as="sourcePoint" />
+            <mxPoint x="750" y="298" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s3_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="3.  Retorna lista de áreas" vertex="1">
+          <mxGeometry height="20" width="290" x="440" y="318" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;dashed=1;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="338" as="sourcePoint" />
+            <mxPoint x="430" y="338" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s4_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="4.  Devuelve Create.cshtml (formulario)" vertex="1">
+          <mxGeometry height="20" width="290" x="130" y="368" as="geometry" />
+        </mxCell>
+        <mxCell id="s4_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;dashed=1;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="388" as="sourcePoint" />
+            <mxPoint x="125" y="388" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s5_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="5.  Completa el formulario y presiona Guardar" vertex="1">
+          <mxGeometry height="20" width="340" x="130" y="428" as="geometry" />
+        </mxCell>
+        <mxCell id="s5_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="125" y="448" as="sourcePoint" />
+            <mxPoint x="430" y="448" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s6_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="6.  POST /Habilidad/Crear (form data)" vertex="1">
+          <mxGeometry height="20" width="290" x="130" y="468" as="geometry" />
+        </mxCell>
+        <mxCell id="s6_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="125" y="488" as="sourcePoint" />
+            <mxPoint x="430" y="488" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s7_note" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="Valida modelo&#xa;(ModelState.IsValid)" vertex="1">
+          <mxGeometry height="40" width="150" x="445" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="s7_conn" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#d6b656;endArrow=none;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="520" as="sourcePoint" />
+            <mxPoint x="445" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s8_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="7.  INSERT INTO Habilidades (SaveChangesAsync)" vertex="1">
+          <mxGeometry height="20" width="360" x="440" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="s8_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="580" as="sourcePoint" />
+            <mxPoint x="750" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s9_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="8.  OK" vertex="1">
+          <mxGeometry height="20" width="290" x="440" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="s9_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;dashed=1;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="750" y="620" as="sourcePoint" />
+            <mxPoint x="430" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s10_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;align=left;" value="9.  Redirige a Index del Área" vertex="1">
+          <mxGeometry height="20" width="290" x="130" y="648" as="geometry" />
+        </mxCell>
+        <mxCell id="s10_arr" edge="1" parent="1" style="edgeStyle=none;html=1;strokeColor=#000000;dashed=1;endArrow=open;endFill=0;endSize=8;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="430" y="668" as="sourcePoint" />
+            <mxPoint x="125" y="668" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="foot_head" parent="1" style="shape=mxgraph.flowchart.start_2;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="26" width="26" x="112" y="692" as="geometry" />
+        </mxCell>
+        <mxCell id="foot_body" parent="1" style="shape=mxgraph.basic.person;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="50" width="50" x="100" y="714" as="geometry" />
+        </mxCell>
+        <mxCell id="foot_lbl" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;align=center;" value="Usuario" vertex="1">
+          <mxGeometry height="20" width="60" x="95" y="766" as="geometry" />
+        </mxCell>
+        <mxCell id="box_c2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="HabilidadController&#xa;[ASP.NET Core MVC]" vertex="1">
+          <mxGeometry height="60" width="200" x="330" y="706" as="geometry" />
+        </mxCell>
+        <mxCell id="box_db2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="SQL Server&#xa;[DevPathContext · EF Core]" vertex="1">
+          <mxGeometry height="60" width="200" x="650" y="706" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

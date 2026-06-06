@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)">
+  <diagram id="DevPath-VistaDespliegue" name="Vista de Despliegue - DevPath">
+    <mxGraphModel dx="1414" dy="789" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="env_local" parent="1" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontStyle=1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=10;size=0;" value="Entorno de Ejecución Local (Localhost / PC de Desarrollo)" vertex="1">
+          <mxGeometry height="560" width="740" x="50" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="node_client" parent="env_local" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;align=center;verticalAlign=top;spacingTop=40;size=0;" value="«UML Node»&#xa;Dispositivo del Usuario / Cliente" vertex="1">
+          <mxGeometry height="292.17391304347825" width="200" x="40" y="133.91304347826087" as="geometry" />
+        </mxCell>
+        <mxCell id="art_browser" parent="node_client" style="html=1;dropTarget=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#6c8ebf;" value="«Artifact»&#xa;Navegador Web&#xa;(Chrome, Edge, Firefox)" vertex="1">
+          <mxGeometry height="97.39130434782608" width="150" x="25" y="121.7391304347826" as="geometry" />
+        </mxCell>
+        <mxCell id="node_server" parent="env_local" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;align=center;verticalAlign=top;spacingTop=40;size=0;" value="«UML Node»&#xa;Servidor de Aplicaciones Local&#xa;(IIS Express / Kestrel Web Server)" vertex="1">
+          <mxGeometry height="206.95652173913044" width="240" x="460" y="60.86956521739131" as="geometry" />
+        </mxCell>
+        <mxCell id="art_app" parent="node_server" style="html=1;dropTarget=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#82b366;" value="«Artifact»&lt;br&gt;DevPath.exe / dll&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="73.04347826086956" width="170" x="35" y="121.73913043478262" as="geometry" />
+        </mxCell>
+        <mxCell id="node_db_server" parent="env_local" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;align=center;verticalAlign=top;spacingTop=40;size=0;" value="«UML Node»&#xa;Motor de Persistencia Local" vertex="1">
+          <mxGeometry height="211.3" width="240" x="460" y="328.7" as="geometry" />
+        </mxCell>
+        <mxCell id="art_db" parent="node_db_server" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;" value="«Database»&lt;br&gt;SQL Server LocalDB&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85.840625" width="170" x="35" y="101.299375" as="geometry" />
+        </mxCell>
+        <mxCell id="link_http" edge="1" parent="env_local" source="node_client" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;entryX=0;entryY=0;entryDx=0;entryDy=85;entryPerimeter=0;exitX=0;exitY=0;exitDx=200;exitDy=145;exitPerimeter=0;" target="node_server" value="HTTP / HTTPS&lt;div&gt;&lt;br/&gt;&lt;/div&gt;">
+          <mxGeometry relative="1" x="-0.1667" y="-20" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="link_db" edge="1" parent="env_local" source="art_app" style="endArrow=none;html=1;edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#b85450;fillColor=#f8cecc;" target="art_db" value="TCP/IP o Named Pipes&#xa;(Cadena de Conexión)">
+          <mxGeometry relative="1" x="-0.0303" y="25" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
