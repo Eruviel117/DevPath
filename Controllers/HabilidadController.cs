@@ -1,7 +1,8 @@
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 public class HabilidadController : Controller
 {
@@ -13,9 +14,12 @@ public class HabilidadController : Controller
     }
 
     // GET: HABILIDADS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.Habilidades.ToListAsync());
+        var habilidades = await _context.Habilidades
+            .Include(h => h.Area)
+            .ToListAsync();
+        return View(habilidades);
     }
 
     // GET: HABILIDADS/Details/5
@@ -39,6 +43,7 @@ public class HabilidadController : Controller
     // GET: HABILIDADS/Create
     public IActionResult Create()
     {
+        ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Nombre");
         return View();
     }
 
@@ -47,7 +52,7 @@ public class HabilidadController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,Nivel,Estado,AreaId,Area,Recursos,Registros")] Habilidad habilidad)
+    public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,Nivel,Estado,AreaId")] Habilidad habilidad)
     {
         if (ModelState.IsValid)
         {
@@ -71,6 +76,7 @@ public class HabilidadController : Controller
         {
             return NotFound();
         }
+        ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Nombre", habilidad.AreaId);
         return View(habilidad);
     }
 
