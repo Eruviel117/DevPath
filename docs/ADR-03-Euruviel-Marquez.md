@@ -95,3 +95,9 @@ de datos y comunicación entre ellos. Para el alcance actual de DevPath, esa com
 | **Microservicios** | Microservicios resuelven el problema de equipos grandes que necesitan desplegar y escalar partes del sistema de forma independiente. DevPath es un proyecto individual con 4 entidades fuertemente relacionadas entre sí (Area → Habilidad → Recurso/Registro) — separarlas en servicios distintos convertiría consultas locales simples en llamadas de red, agregando latencia y complejidad de coordinación sin ningún beneficio real para un solo usuario. |
 | **Arquitectura cliente-servidor con API REST separada** | Se consideró por si en el futuro se agrega una app móvil. Se descartó por ahora porque no hay un segundo cliente real que consumir — construir una API sin un consumidor sería esfuerzo anticipado sin valor inmediato. Si surge esa necesidad, la capa de Presentación actual puede extenderse para exponer endpoints JSON sin rediseñar las capas de Dominio o Datos. |
 
+
+## Diagrama 
+
+
+<img width="1015" height="672" alt="Captura de pantalla 2026-06-12 194641" src="https://github.com/user-attachments/assets/a454480d-6307-455c-9329-63945060ca6d" />
+
