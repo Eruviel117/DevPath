@@ -101,3 +101,40 @@ de datos y comunicación entre ellos. Para el alcance actual de DevPath, esa com
 
 <img width="1015" height="672" alt="Captura de pantalla 2026-06-12 194641" src="https://github.com/user-attachments/assets/a454480d-6307-455c-9329-63945060ca6d" />
 
+
+
+---
+
+##  Declaración de uso de Inteligencia Artificial
+
+| Campo | Detalle |
+|---|---|
+| **Nombre del estudiante** | Euruviel Marquez Martinez |
+| **IA utilizada** | Claude  |
+| **Fecha de uso** | 10/06/2026 |
+| **Propósito** | Investigacion sobre los temas|
+
+### Prompt utilizado:
+- *"puede ayudarme a definir bien los El estilo elegido (capas, cliente-servidor, microservicios, event-driven, serverless, hexagonal, etc.), lo necesito oara saber y determinar y explicar de mejor manera un proyeto que estoy haciendo porfavor"*
+
+### Respuesta en crudo (raw):
+
+Arquitectura en capas (Layered/N-Tier)
+
+El sistema se organiza en capas horizontales: presentación, lógica de negocio, acceso a datos. Cada capa solo se comunica con la inmediatamente adyacente. Es el más común en proyectos académicos tipo MVC (como tu CatalogoApp/AnimeVault con Domain, Application, Infrastructure, Presentation).
+Cliente-servidor
+
+Un servidor centraliza recursos/lógica y los clientes (web, móvil, desktop) consumen esos servicios mediante peticiones. Casi todo proyecto web entra aquí a nivel general.
+Arquitectura hexagonal (Ports & Adapters)
+
+El núcleo del negocio (dominio) queda aislado en el centro, sin depender de frameworks ni bases de datos. Se comunica con el exterior mediante "puertos" (interfaces) y "adaptadores" (implementaciones concretas: API REST, base de datos, etc.). Es muy popular en Spring Boot bien estructurado.
+Microservicios
+
+La aplicación se divide en servicios pequeños, independientes, cada uno con su propia base de datos y despliegue, comunicándose por red (HTTP/mensajería).
+Event-driven (basada en eventos)
+
+Los componentes se comunican emitiendo y reaccionando a eventos de forma asíncrona, normalmente vía un broker de mensajes (Kafka, RabbitMQ).
+Serverless
+
+La lógica se ejecuta en funciones (FaaS) administradas por un proveedor cloud, sin gestionar servidores directamente.
+---
