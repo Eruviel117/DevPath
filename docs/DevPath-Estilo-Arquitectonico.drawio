@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="pQDDUKLL5-XMnG6muR0Z" name="Página-1">
+    <mxGraphModel dx="832" dy="464" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=20;fontStyle=1;fontColor=#002060;" value="DevPath — Arquitectura en Capas (Layered Architecture)" vertex="1">
+          <mxGeometry height="32" width="870" x="150" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontStyle=2;fontColor=#6B7280;" value="&lt;span style=&quot;font-style: normal;&quot;&gt;Monolito desplegado como una sola unidad — las dependencias fluyen en una sola dirección: hacia abajo&lt;/span&gt;" vertex="1">
+          <mxGeometry height="22" width="870" x="150" y="54" as="geometry" />
+        </mxCell>
+        <mxCell id="capa1" parent="1" style="swimlane;startSize=30;fillColor=#EFF6FF;strokeColor=#00B0F0;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#002060;align=left;swimlaneLine=1;" value="CAPA DE PRESENTACIÓN" vertex="1">
+          <mxGeometry height="170" width="970" x="100" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_area" parent="capa1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00B0F0;strokeColor=#0090CC;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;" value="AreaController" vertex="1">
+          <mxGeometry height="50" width="160" x="40" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_hab" parent="capa1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00B0F0;strokeColor=#0090CC;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;" value="HabilidadController" vertex="1">
+          <mxGeometry height="50" width="160" x="230" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_rec" parent="capa1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#00B0F0;strokeColor=#0090CC;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;" value="RecursoController" vertex="1">
+          <mxGeometry height="50" width="160" x="420" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_reg" parent="capa1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#00B0F0;dashed=1;fontColor=#00B0F0;fontSize=11;align=center;" value="RegistroController&lt;div&gt;&lt;br&gt;(próximo)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="160" x="610" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="views" parent="capa1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#00B0F0;fontColor=#002060;fontSize=10;align=center;" value="Views/ (Razor + Bootstrap)&#xa;Index, Create, Edit,&#xa;Details, Delete" vertex="1">
+          <mxGeometry height="62" width="150" x="800" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctrl_view" edge="1" parent="capa1" source="ctrl_rec" style="edgeStyle=orthogonalEdgeStyle;fontSize=9;fontColor=#374151;endArrow=block;endFill=1;strokeColor=#0090CC;" target="views" value="devuelve">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" edge="1" parent="1" source="capa1" style="edgeStyle=orthogonalEdgeStyle;fontSize=11;fontColor=#374151;endArrow=block;endFill=1;strokeColor=#002060;strokeWidth=2;" target="capa2" value="usa (DevPathContext inyectado)">
+          <mxGeometry relative="1" x="0.5" as="geometry">
+            <mxPoint x="585" y="270" as="sourcePoint" />
+            <mxPoint x="585" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="capa2" parent="1" style="swimlane;startSize=30;fillColor=#F0FDF4;strokeColor=#16A34A;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#15803D;align=left;swimlaneLine=1;" value="CAPA DE DOMINIO / APLICACIÓN" vertex="1">
+          <mxGeometry height="160" width="970" x="100" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="m_area" parent="capa2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A34A;strokeColor=#15803D;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;" value="Area&#xa;Id, Nombre,&#xa;Descripcion, Color" vertex="1">
+          <mxGeometry height="64" width="170" x="40" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="m_hab" parent="capa2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A34A;strokeColor=#15803D;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;" value="Habilidad&#xa;Titulo, Nivel, Estado,&#xa;AreaId (FK)" vertex="1">
+          <mxGeometry height="64" width="170" x="250" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="m_rec" parent="capa2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#16A34A;strokeColor=#15803D;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;" value="Recurso&#xa;Nombre, Url, Tipo,&#xa;HabilidadId (FK)" vertex="1">
+          <mxGeometry height="64" width="170" x="460" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="m_reg" parent="capa2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;dashed=1;fontColor=#15803D;fontSize=10;align=center;" value="Registro&#xa;Nota, Fecha,&#xa;HabilidadId (FK)" vertex="1">
+          <mxGeometry height="64" width="170" x="670" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="rel1" edge="1" parent="capa2" source="m_area" style="edgeStyle=orthogonalEdgeStyle;fontSize=9;fontColor=#15803D;endArrow=block;endFill=1;strokeColor=#15803D;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="m_hab" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel2" edge="1" parent="capa2" source="m_hab" style="edgeStyle=orthogonalEdgeStyle;fontSize=9;fontColor=#15803D;endArrow=block;endFill=1;strokeColor=#15803D;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="m_rec" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel3" edge="1" parent="capa2" source="m_rec" style="edgeStyle=orthogonalEdgeStyle;fontSize=9;fontColor=#15803D;endArrow=block;endFill=1;strokeColor=#15803D;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="m_reg" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" edge="1" parent="1" source="capa2" style="edgeStyle=orthogonalEdgeStyle;fontSize=11;fontColor=#374151;endArrow=block;endFill=1;strokeColor=#002060;strokeWidth=2;" target="capa3" value="se mapea vía Entity Framework">
+          <mxGeometry relative="1" x="0.5" as="geometry">
+            <mxPoint x="585" y="480" as="sourcePoint" />
+            <mxPoint x="585" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="capa3" parent="1" style="swimlane;startSize=30;fillColor=#FFFBEB;strokeColor=#D97706;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#92400E;align=left;swimlaneLine=1;" value="CAPA DE ACCESO A DATOS" vertex="1">
+          <mxGeometry height="150" width="970" x="100" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="ctx" parent="capa3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D97706;strokeColor=#92400E;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;" value="DevPathContext : DbContext&#xa;&#xa;DbSet&lt;Area&gt; Areas&#xa;DbSet&lt;Habilidad&gt; Habilidades&#xa;DbSet&lt;Recurso&gt; Recursos&#xa;DbSet&lt;Registro&gt; Registros" vertex="1">
+          <mxGeometry height="100" width="320" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ef" parent="capa3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;fontColor=#92400E;fontSize=10;align=center;" value="Entity Framework Core&lt;br&gt;(Migrations, LINQ → SQL" vertex="1">
+          <mxGeometry height="70" width="220" x="430" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="sql" parent="capa3" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#92400E;strokeColor=#92400E;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;" value="SQL Server LocalDB&#xa;&#xa;DevPathDB&#xa;[Areas] [Habilidades]&#xa;[Recursos] [Registros]" vertex="1">
+          <mxGeometry height="100" width="220" x="710" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ctx_ef" edge="1" parent="capa3" source="ctx" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;strokeColor=#92400E;" target="ef" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ef_sql" edge="1" parent="capa3" source="ef" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;strokeColor=#92400E;" target="sql" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
