@@ -1,25 +1,24 @@
-namespace DevPath.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
 
-public class AreasController : Controller
+public class RecursoController : Controller
 {
     private readonly DevPathContext _context;
 
-    public AreasController(DevPathContext context)
+    public RecursoController(DevPathContext context)
     {
         _context = context;
     }
 
-    // GET: AREAS
+    // GET: RECURSOS
     public async Task<IActionResult> Index()    
     {
-        return View(await _context.Areas.ToListAsync());
+        return View(await _context.Recursos.ToListAsync());
     }
 
-    // GET: AREAS/Details/5
+    // GET: RECURSOS/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -27,39 +26,42 @@ public class AreasController : Controller
             return NotFound();
         }
 
-        var area = await _context.Areas
+        var recurso = await _context.Recursos
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (area == null)
+        if (recurso == null)
         {
             return NotFound();
         }
 
-        return View(area);
+        return View(recurso);
     }
 
-    // GET: AREAS/Create
+    // GET: RECURSOS/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: AREAS/Create
+    // POST: RECURSOS/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Nombre,Descripcion,Color")] Area area)
+    public async Task<IActionResult> Create([Bind("Id,Nombre,Url,Tipo,Completado,HabilidadId")] Recurso recurso)
     {
+
+
         if (ModelState.IsValid)
         {
-            _context.Add(area);
+            _context.Add(recurso);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(area);
+        return View(recurso);
     }
 
-    // GET: AREAS/Edit/5
+
+    // GET: RECURSOS/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -67,22 +69,23 @@ public class AreasController : Controller
             return NotFound();
         }
 
-        var area = await _context.Areas.FindAsync(id);
-        if (area == null)
+        var recurso = await _context.Recursos.FindAsync(id);
+        if (recurso == null)
         {
             return NotFound();
         }
-        return View(area);
+        return View(recurso);
     }
 
-    // POST: AREAS/Edit/5
+
+    // POST: RECURSOS/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Nombre,Descripcion,Color")] Area area)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Nombre,Url,Tipo,Completado,HabilidadId")] Recurso recurso)
     {
-        if (id != area.Id)
+        if (id != recurso.Id)
         {
             return NotFound();
         }
@@ -91,12 +94,12 @@ public class AreasController : Controller
         {
             try
             {
-                _context.Update(area);
+                _context.Update(recurso);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AreaExists(area.Id))
+                if (!RecursoExists(recurso.Id))
                 {
                     return NotFound();
                 }
@@ -107,10 +110,10 @@ public class AreasController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        return View(area);
+        return View(recurso);
     }
 
-    // GET: AREAS/Delete/5
+    // GET: RECURSOS/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -118,33 +121,34 @@ public class AreasController : Controller
             return NotFound();
         }
 
-        var area = await _context.Areas
+        var recurso = await _context.Recursos
             .FirstOrDefaultAsync(m => m.Id == id);
-        if (area == null)
+        if (recurso == null)
         {
             return NotFound();
         }
 
-        return View(area);
+        return View(recurso);
     }
 
-    // POST: AREAS/Delete/5
+    // POST: RECURSOS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var area = await _context.Areas.FindAsync(id);
-        if (area != null)
+        var recurso = await _context.Recursos.FindAsync(id);
+        if (recurso != null)
         {
-            _context.Areas.Remove(area);
+            _context.Recursos.Remove(recurso);
         }
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool AreaExists(int? id)
+    private bool RecursoExists(int? id)
     {
-        return _context.Areas.Any(e => e.Id == id);
+        return _context.Recursos.Any(e => e.Id == id);
     }
+
 }
