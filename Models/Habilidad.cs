@@ -32,5 +32,20 @@ namespace DevPath.Models
 
         // Relación: una habilidad tiene muchos registros
         public ICollection<Registro> Registros { get; set; } = new List<Registro>();
+
+        // Propiedad calculada — no se guarda en la base de datos
+        public int PorcentajeProgreso
+        {
+            get
+            {
+                if (Recursos == null || Recursos.Count == 0)
+                    return 0;
+
+                int completados = Recursos.Count(r => r.Completado);
+                return (completados * 100) / Recursos.Count;
+            }
+        }
     }
+
+
 }

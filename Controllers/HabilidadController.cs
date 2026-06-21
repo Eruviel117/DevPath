@@ -18,6 +18,7 @@ public class HabilidadController : Controller
     {
         var habilidades = await _context.Habilidades
             .Include(h => h.Area)
+            .Include(h => h.Recursos)
             .ToListAsync();
         return View(habilidades);
     }
