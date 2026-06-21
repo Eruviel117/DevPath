@@ -14,12 +14,33 @@ public class HabilidadController : Controller
     }
 
     // GET: HABILIDADS
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? areaId, string? nivel, string? estado)
     {
-        var habilidades = await _context.Habilidades
+        var query = _context.Habilidades
             .Include(h => h.Area)
             .Include(h => h.Recursos)
-            .ToListAsync();
+            .AsQueryable();
+
+        if (areaId.HasValue)
+        {
+            query = query.Where(h => h.AreaId == areaId.Value);
+        }
+
+        if (!string.IsNullOrEmpty(nivel))
+        {
+            query = query.Where(h => h.Nivel == nivel);
+        }
+
+        if (!string.IsNullOrEmpty(estado))
+        {
+            query = query.Where(h => h.Estado == estado);
+        }
+
+        ViewData["Areas"] = new SelectList(_context.Areas, "Id", "Nombre", areaId);
+        ViewData["NivelSeleccionado"] = nivel;
+        ViewData["EstadoSeleccionado"] = estado;
+
+        var habilidades = await query.ToListAsync();
         return View(habilidades);
     }
 

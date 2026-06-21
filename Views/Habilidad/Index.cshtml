@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 @model IEnumerable<DevPath.Models.Habilidad>
+
 
 @{
     ViewData["Title"] = "Habilidades";
@@ -9,6 +12,37 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">+ Nueva Habilidad</a>
 </p>
+
+<form asp-action="Index" method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <select name="areaId" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Todas las áreas --</option>
+            @foreach (var area in (SelectList)ViewData["Areas"])
+            {
+                <option value="@area.Value">@area.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="nivel" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Todos los niveles --</option>
+            <option value="Básico" selected="@(ViewData["NivelSeleccionado"]?.ToString() == "Básico")">Básico</option>
+            <option value="Intermedio" selected="@(ViewData["NivelSeleccionado"]?.ToString() == "Intermedio")">Intermedio</option>
+            <option value="Avanzado" selected="@(ViewData["NivelSeleccionado"]?.ToString() == "Avanzado")">Avanzado</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="estado" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Todos los estados --</option>
+            <option value="Pendiente" selected="@(ViewData["EstadoSeleccionado"]?.ToString() == "Pendiente")">Pendiente</option>
+            <option value="En progreso" selected="@(ViewData["EstadoSeleccionado"]?.ToString() == "En progreso")">En progreso</option>
+            <option value="Completado" selected="@(ViewData["EstadoSeleccionado"]?.ToString() == "Completado")">Completado</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Index" class="btn btn-outline-secondary w-100">Limpiar filtros</a>
+    </div>
+</form>
 
 <table class="table table-hover align-middle">
     <thead>
@@ -22,6 +56,12 @@
         </tr>
     </thead>
     <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">No hay habilidades que coincidan con el filtro.</td>
+            </tr>
+        }
         @foreach (var item in Model)
         {
             <tr>
