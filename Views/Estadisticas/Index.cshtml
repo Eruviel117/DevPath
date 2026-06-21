@@ -1,0 +1,85 @@
+﻿@model DevPath.Models.EstadisticasViewModel
+
+@{
+    ViewData["Title"] = "Estadísticas";
+}
+
+<h2>📊 Estadísticas Generales</h2>
+<hr />
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Áreas</h5>
+                <p class="display-4">@Model.TotalAreas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Habilidades</h5>
+                <p class="display-4">@Model.TotalHabilidades</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Recursos</h5>
+                <p class="display-4">@Model.TotalRecursos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Habilidades por estado</h4>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="alert alert-secondary text-center">
+            <strong>Pendiente</strong><br />
+            @Model.HabilidadesPendientes
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="alert alert-warning text-center">
+            <strong>En progreso</strong><br />
+            @Model.HabilidadesEnProgreso
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="alert alert-success text-center">
+            <strong>Completado</strong><br />
+            @Model.HabilidadesCompletadas
+        </div>
+    </div>
+</div>
+
+<h4>Progreso por área</h4>
+@if (!Model.ProgresoPorArea.Any())
+{
+    <p class="text-muted">Todavía no hay áreas registradas.</p>
+}
+else
+{
+    @foreach (var area in Model.ProgresoPorArea)
+    {
+        <div class="mb-3">
+            <div class="d-flex justify-content-between">
+                <strong>@area.NombreArea</strong>
+                <span>@area.HabilidadesCompletadas / @area.TotalHabilidades completadas</span>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar"
+                     style="width: @area.PorcentajeCompletado%; background-color: @area.Color;"
+                     aria-valuenow="@area.PorcentajeCompletado" aria-valuemin="0" aria-valuemax="100">
+                    @area.PorcentajeCompletado%
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<h4 class="mt-4">Recursos completados</h4>
+<p>@Model.RecursosCompletados de @Model.TotalRecursos recursos marcados como completados.</p>
