@@ -14,9 +14,12 @@ public class AreasController : Controller
     }
 
     // GET: AREAS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.Areas.ToListAsync());
+        var areas = await _context.Areas
+            .Include(a => a.Habilidades)
+            .ToListAsync();
+        return View(areas);
     }
 
     // GET: AREAS/Details/5

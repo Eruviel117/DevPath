@@ -1,8 +1,186 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DevPath.Models.EstadisticasViewModel
+
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero -->
+<div class="p-4 mb-4 rounded-3" style="background-color: #002060;">
+    <div class="container-fluid py-3">
+        <h1 class="display-6 fw-bold text-white"> Bienvenido a DevPath</h1>
+        <p class="col-md-8 fs-5 text-white opacity-75">
+            Tu plataforma personal para organizar y dar seguimiento
+            a tus metas de aprendizaje autónomo.
+        </p>
+        <a asp-controller="Habilidad" asp-action="Create"
+           class="btn btn-lg me-2"
+           style="background-color:#00B0F0; color:white;">
+            + Nueva Habilidad
+        </a>
+        <a asp-controller="Estadisticas" asp-action="Index"
+           class="btn btn-lg btn-outline-light">
+            Ver Estadísticas
+        </a>
+    </div>
+</div>
+
+<!-- Tarjetas de resumen -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <p class="fs-1 fw-bold mb-0" style="color:#002060;">
+                    @Model.TotalAreas
+                </p>
+                <p class="text-muted mb-2">Áreas</p>
+                <a asp-controller="Areas" asp-action="Index"
+                   class="btn btn-sm btn-outline-primary">Ver áreas</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <p class="fs-1 fw-bold mb-0" style="color:#002060;">
+                    @Model.TotalHabilidades
+                </p>
+                <p class="text-muted mb-2">Habilidades</p>
+                <a asp-controller="Habilidad" asp-action="Index"
+                   class="btn btn-sm btn-outline-primary">Ver habilidades</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <p class="fs-1 fw-bold mb-0" style="color:#002060;">
+                    @Model.TotalRecursos
+                </p>
+                <p class="text-muted mb-2">Recursos</p>
+                <a asp-controller="Recurso" asp-action="Index"
+                   class="btn btn-sm btn-outline-primary">Ver recursos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <p class="fs-1 fw-bold mb-0" style="color:#16A34A;">
+                    @Model.RecursosCompletados
+                </p>
+                <p class="text-muted mb-2">Recursos completados</p>
+                <a asp-controller="Estadisticas" asp-action="Index"
+                   class="btn btn-sm btn-outline-success">Ver progreso</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estado de habilidades -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <h5 class="fw-bold mb-3" style="color:#002060;">
+            Estado de habilidades
+        </h5>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-secondary fs-4 px-3 py-2">
+                    @Model.HabilidadesPendientes
+                </span>
+                <div>
+                    <p class="fw-bold mb-0">Pendientes</p>
+                    <p class="text-muted small mb-0">Sin comenzar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-warning text-dark fs-4 px-3 py-2">
+                    @Model.HabilidadesEnProgreso
+                </span>
+                <div>
+                    <p class="fw-bold mb-0">En progreso</p>
+                    <p class="text-muted small mb-0">Trabajando en ello</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-success fs-4 px-3 py-2">
+                    @Model.HabilidadesCompletadas
+                </span>
+                <div>
+                    <p class="fw-bold mb-0">Completadas</p>
+                    <p class="text-muted small mb-0">¡Listo!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progreso por área -->
+@if (Model.ProgresoPorArea.Any())
+{
+    <div class="mb-4">
+        <h5 class="fw-bold mb-3" style="color:#002060;">
+            Progreso por área
+        </h5>
+        @foreach (var area in Model.ProgresoPorArea)
+        {
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <strong>@area.NombreArea</strong>
+                    <span class="text-muted small">
+                        @area.HabilidadesCompletadas / @area.TotalHabilidades completadas
+                    </span>
+                </div>
+                <div class="progress" style="height: 18px;">
+                    <div class="progress-bar" role="progressbar"
+                         style="width: @area.PorcentajeCompletado%;
+                        background-color: @area.Color;"
+                         aria-valuenow="@area.PorcentajeCompletado"
+                         aria-valuemin="0" aria-valuemax="100">
+                        @area.PorcentajeCompletado%
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Accesos rápidos -->
+<div class="row g-3">
+    <div class="col-12">
+        <h5 class="fw-bold mb-3" style="color:#002060;">Accesos rápidos</h5>
+    </div>
+    <div class="col-md-3">
+        <a asp-controller="Areas" asp-action="Create"
+           class="btn btn-outline-primary w-100 py-3">
+            ➕ Nueva Área
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-controller="Habilidad" asp-action="Create"
+           class="btn btn-outline-primary w-100 py-3">
+            ➕ Nueva Habilidad
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-controller="Recurso" asp-action="Create"
+           class="btn btn-outline-primary w-100 py-3">
+            ➕ Nuevo Recurso
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a asp-controller="Registro" asp-action="Create"
+           class="btn btn-outline-primary w-100 py-3">
+            ➕ Nuevo Registro
+        </a>
+    </div>
 </div>
