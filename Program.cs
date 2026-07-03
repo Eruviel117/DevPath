@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<DevPath.Patterns.LoggingHabilidadDecorator>();
 builder.Services.AddDbContext<DevPathContext>(options =>
     options.UseSqlServer(builder.Configuration
         .GetConnectionString("DevPathContext")));
