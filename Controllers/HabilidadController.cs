@@ -53,11 +53,21 @@ public class HabilidadController : Controller
         }
 
         var habilidad = await _context.Habilidades
+            .Include(h => h.Area)
+            .Include(h => h.Recursos)
+            .Include(h => h.Registros)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (habilidad == null)
         {
             return NotFound();
         }
+
+        // Patrón Strategy — selecciona la estrategia según el nivel
+        var strategy = DevPath.Patterns.NivelStrategyFactory.Obtener(habilidad.Nivel);
+        ViewData["NivelDescripcion"] = strategy.ObtenerDescripcion();
+        ViewData["NivelRecursos"] = strategy.RecursosRecomendados();
+        ViewData["NivelColor"] = strategy.ObtenerColor();
 
         return View(habilidad);
     }
