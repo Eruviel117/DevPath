@@ -37,7 +37,7 @@ graph TD
         WebApp[" Web App\nASP.NET Core MVC + C#\nControllers + Views + Razor"]
         API[" API REST\nASP.NET Core Web API\nEndpoints JSON + Swagger"]
         DB[(" SQL Server\nLocalDB\nDevPathDB")]
-        EF[" Entity Framework Core\nORM Code First\nMigraciones")]
+        EF[" Entity Framework Core\nORM Code First\nMigraciones"]
     end
 
     Usuario -->|HTTP/HTTPS\npeticiones web| WebApp
@@ -60,7 +60,7 @@ graph TD
 
 ```mermaid
 graph TD
-    Usuario([👤 Usuario\nNavegador Web])
+    Usuario([ Usuario\nNavegador Web])
 
     subgraph WebApp [Web App — ASP.NET Core MVC]
 
@@ -79,8 +79,8 @@ graph TD
         end
 
         subgraph Patrones [Patrones GOF — Patterns/]
-            STR["⚡ Strategy\nINivelStrategy\nNivelBasicoStrategy\nNivelIntermedioStrategy\nNivelAvanzadoStrategy\nNivelStrategyFactory"]
-            DEC["🔁 Decorator\nLoggingHabilidadDecorator"]
+            STR[" Strategy\nINivelStrategy\nNivelBasicoStrategy\nNivelIntermedioStrategy\nNivelAvanzadoStrategy\nNivelStrategyFactory"]
+            DEC[" Decorator\nLoggingHabilidadDecorator"]
         end
 
         subgraph Dominio [Capa de Dominio — Models/]
@@ -97,7 +97,7 @@ graph TD
 
     end
 
-    DB[("🗄️ SQL Server\nDevPathDB")]
+    DB[(" SQL Server\nDevPathDB")]
 
     Usuario -->|HTTP| AC
     Usuario -->|HTTP| HC
