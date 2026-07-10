@@ -1,53 +1,52 @@
 @model IEnumerable<DevPath.Models.Registro>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Registros de Avance";
 }
 
-<h1>Index</h1>
+<h2>Registros de Avance</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">+ Nuevo Registro</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nota)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HabilidadId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Habilidad)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Nota)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.HabilidadId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Habilidad)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Todavía no hay registros de avance.
+        <a asp-action="Create">Agrega tu primer registro</a>.
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="row g-3">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header d-flex justify-content-between
+                        align-items-center"
+                         style="background-color: #002060; color: white;">
+                        <span class="fw-bold">
+                             @item.Habilidad?.Titulo
+                        </span>
+                        <small>
+                            @item.Fecha.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@item.Nota</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-primary">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-secondary">Ver</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
