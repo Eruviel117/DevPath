@@ -31,19 +31,16 @@ public class AreasController : Controller
         }
 
         var area = await _context.Areas
+            .Include(a => a.Habilidades)
+                .ThenInclude(h => h.Recursos)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (area == null)
         {
             return NotFound();
         }
 
         return View(area);
-    }
-
-    // GET: AREAS/Create
-    public IActionResult Create()
-    {
-        return View();
     }
 
     // POST: AREAS/Create
