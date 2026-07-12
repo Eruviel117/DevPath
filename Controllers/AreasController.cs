@@ -21,7 +21,6 @@ public class AreasController : Controller
             .ToListAsync();
         return View(areas);
     }
-
     // GET: AREAS/Details/5
     public async Task<IActionResult> Details(int? id)
     {

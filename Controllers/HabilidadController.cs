@@ -7,10 +7,14 @@ using Microsoft.EntityFrameworkCore;
 public class HabilidadController : Controller
 {
     private readonly DevPathContext _context;
+    private readonly DevPath.Patterns.LoggingHabilidadDecorator _decorator;
 
-    public HabilidadController(DevPathContext context)
+    public HabilidadController(
+        DevPathContext context,
+        DevPath.Patterns.LoggingHabilidadDecorator decorator)
     {
         _context = context;
+        _decorator = decorator;
     }
 
     // GET: HABILIDADS
@@ -53,11 +57,21 @@ public class HabilidadController : Controller
         }
 
         var habilidad = await _context.Habilidades
+            .Include(h => h.Area)
+            .Include(h => h.Recursos)
+            .Include(h => h.Registros)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (habilidad == null)
         {
             return NotFound();
         }
+
+        // Patrón Strategy — selecciona la estrategia según el nivel
+        var strategy = DevPath.Patterns.NivelStrategyFactory.Obtener(habilidad.Nivel);
+        ViewData["NivelDescripcion"] = strategy.ObtenerDescripcion();
+        ViewData["NivelRecursos"] = strategy.RecursosRecomendados();
+        ViewData["NivelColor"] = strategy.ObtenerColor();
 
         return View(habilidad);
     }
@@ -78,8 +92,7 @@ public class HabilidadController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(habilidad);
-            await _context.SaveChangesAsync();
+            await _decorator.GuardarHabilidadAsync(habilidad);
             return RedirectToAction(nameof(Index));
         }
         return View(habilidad);
@@ -163,10 +176,8 @@ public class HabilidadController : Controller
         var habilidad = await _context.Habilidades.FindAsync(id);
         if (habilidad != null)
         {
-            _context.Habilidades.Remove(habilidad);
+            await _decorator.EliminarHabilidadAsync(habilidad);
         }
-
-        await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 

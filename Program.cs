@@ -8,6 +8,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DevPathContext>(options =>
     options.UseSqlServer(builder.Configuration
         .GetConnectionString("DevPathContext")));
+builder.Services.AddScoped<DevPath.Patterns.LoggingHabilidadDecorator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

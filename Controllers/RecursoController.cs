@@ -1,7 +1,8 @@
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 public class RecursoController : Controller
 {
@@ -27,7 +28,9 @@ public class RecursoController : Controller
         }
 
         var recurso = await _context.Recursos
+            .Include(r => r.Habilidad)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (recurso == null)
         {
             return NotFound();
@@ -39,6 +42,7 @@ public class RecursoController : Controller
     // GET: RECURSOS/Create
     public IActionResult Create()
     {
+        ViewData["HabilidadId"] = new SelectList(_context.Habilidades, "Id", "Titulo");
         return View();
     }
 
