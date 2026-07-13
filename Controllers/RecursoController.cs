@@ -154,5 +154,20 @@ public class RecursoController : Controller
     {
         return _context.Recursos.Any(e => e.Id == id);
     }
+    // POST: Recurso/ToggleCompletado/5
+    [HttpPost]
+    public async Task<IActionResult> ToggleCompletado(int id)
+    {
+        var recurso = await _context.Recursos.FindAsync(id);
+        if (recurso == null)
+        {
+            return NotFound();
+        }
+
+        recurso.Completado = !recurso.Completado;
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
 
 }

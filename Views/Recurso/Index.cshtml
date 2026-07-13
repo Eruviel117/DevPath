@@ -52,14 +52,14 @@ else
                         }
                     </td>
                     <td>
-                        @if (item.Completado)
-                        {
-                            <span class="badge bg-success">Completado ✅</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">Pendiente</span>
-                        }
+                        <form asp-action="ToggleCompletado" asp-route-id="@item.Id"
+                              method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm @(item.Completado ? "btn-success" : "btn-outline-secondary")">
+                                @(item.Completado ? "✅ Completado" : "⏳ Pendiente")
+                            </button>
+                        </form>
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id"
