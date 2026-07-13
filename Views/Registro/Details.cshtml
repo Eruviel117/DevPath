@@ -1,45 +1,65 @@
 @model DevPath.Models.Registro
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Registro";
 }
 
-<h1>Details</h1>
+<h2> Registro de Avance</h2>
+<hr />
 
-<div>
-    <h4>Registro</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nota)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nota)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fecha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fecha)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HabilidadId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HabilidadId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Habilidad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Habilidad)
-        </dd>
-    </dl>
+<div class="row g-4">
+
+    <!-- Nota principal -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header text-white fw-bold"
+                 style="background-color: #002060;">
+                Nota de avance
+            </div>
+            <div class="card-body">
+                <p class="card-text fs-5">@Model.Nota</p>
+            </div>
+            <div class="card-footer bg-white border-0">
+                <small class="text-muted">
+                     Registrado el @Model.Fecha.ToString("dd/MM/yyyy")
+                    a las @Model.Fecha.ToString("HH:mm")
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel lateral -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100"
+             style="border-left: 5px solid #00B0F0 !important;">
+            <div class="card-header fw-bold text-white"
+                 style="background-color: #00B0F0;">
+                 Habilidad vinculada
+            </div>
+            <div class="card-body">
+                <p class="fw-bold mb-1">
+                    @Model.Habilidad?.Titulo
+                </p>
+                <p class="text-muted small mb-3">
+                    Este registro forma parte del historial
+                    de avance de esta habilidad.
+                </p>
+                <a asp-controller="Habilidad"
+                   asp-action="Details"
+                   asp-route-id="@Model.HabilidadId"
+                   class="btn btn-outline-primary btn-sm w-100">
+                    Ver habilidad completa
+                </a>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<!-- Botones -->
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id"
+       class="btn btn-primary">Editar</a>
+    <a asp-action="Index"
+       class="btn btn-secondary">Volver a Registros</a>
 </div>
