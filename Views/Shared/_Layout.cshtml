@@ -21,10 +21,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Areas" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Areas" asp-action="Index">Áreas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Habilidad" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Habilidad" asp-action="Index">Habilidades</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Recurso" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Recurso" asp-action="Index">Recursos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Registro" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Registro" asp-action="Index">Registros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Estadisticas" ? "active fw-bold" : "text-dark")"
+                               asp-controller="Estadisticas" asp-action="Index">Estadísticas</a>
                         </li>
                     </ul>
                 </div>
