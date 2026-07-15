@@ -3,7 +3,9 @@ namespace DevPath.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class AreasController : Controller
 {
     private readonly DevPathContext _context;
