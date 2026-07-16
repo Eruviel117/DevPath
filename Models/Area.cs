@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace DevPath.Models
 {
@@ -16,7 +18,10 @@ namespace DevPath.Models
         [Display(Name = "Color")]
         public string Color { get; set; } = "#00B0F0";
 
-        // Relación: un área tiene muchas habilidades
+        // Relación con el usuario propietario
+        public string? UserId { get; set; }
+        public IdentityUser? User { get; set; }
+
         public ICollection<Habilidad> Habilidades { get; set; } = new List<Habilidad>();
     }
 }

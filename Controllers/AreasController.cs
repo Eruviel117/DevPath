@@ -1,5 +1,5 @@
+using System.Security.Claims;
 namespace DevPath.Controllers;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
@@ -18,8 +18,10 @@ public class AreasController : Controller
     // GET: AREAS
     public async Task<IActionResult> Index()
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var areas = await _context.Areas
             .Include(a => a.Habilidades)
+            .Where(a => a.UserId == userId)
             .ToListAsync();
         return View(areas);
     }
@@ -30,6 +32,8 @@ public class AreasController : Controller
         {
             return NotFound();
         }
+
+
 
         var area = await _context.Areas
             .Include(a => a.Habilidades)
@@ -43,6 +47,12 @@ public class AreasController : Controller
 
         return View(area);
     }
+    // GET: AREAS/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
 
     // POST: AREAS/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -53,6 +63,7 @@ public class AreasController : Controller
     {
         if (ModelState.IsValid)
         {
+            area.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context.Add(area);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
