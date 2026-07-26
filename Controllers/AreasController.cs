@@ -3,7 +3,9 @@ namespace DevPath.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class AreasController : Controller
 {
     private readonly DevPathContext _context;
@@ -14,11 +16,13 @@ public class AreasController : Controller
     }
 
     // GET: AREAS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.Areas.ToListAsync());
+        var areas = await _context.Areas
+            .Include(a => a.Habilidades)
+            .ToListAsync();
+        return View(areas);
     }
-
     // GET: AREAS/Details/5
     public async Task<IActionResult> Details(int? id)
     {
@@ -28,19 +32,16 @@ public class AreasController : Controller
         }
 
         var area = await _context.Areas
+            .Include(a => a.Habilidades)
+                .ThenInclude(h => h.Recursos)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (area == null)
         {
             return NotFound();
         }
 
         return View(area);
-    }
-
-    // GET: AREAS/Create
-    public IActionResult Create()
-    {
-        return View();
     }
 
     // POST: AREAS/Create

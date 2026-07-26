@@ -1,65 +1,76 @@
 @model IEnumerable<DevPath.Models.Recurso>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Recursos";
 }
 
-<h1>Index</h1>
+<h2>Mis Recursos</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">+ Nuevo Recurso</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Url)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Completado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HabilidadId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Habilidad)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Url)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Completado)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.HabilidadId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Habilidad)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Todavía no hay recursos registrados.
+        <a asp-action="Create">Agrega tu primer recurso</a>.
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Habilidad</th>
+                <th>Tipo</th>
+                <th>URL</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>@item.Habilidad?.Titulo</td>
+                    <td>
+                        <span class="badge bg-secondary">@item.Tipo</span>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Url))
+                        {
+                            <a href="@item.Url" target="_blank">
+                                Ver recurso 🔗
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin URL</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="ToggleCompletado" asp-route-id="@item.Id"
+                              method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit"
+                                    class="btn btn-sm @(item.Completado ? "btn-success" : "btn-outline-secondary")">
+                                @(item.Completado ? "✅ Completado" : "⏳ Pendiente")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-primary">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-secondary">Ver</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

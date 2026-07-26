@@ -1,8 +1,11 @@
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class RecursoController : Controller
 {
     private readonly DevPathContext _context;
@@ -27,7 +30,9 @@ public class RecursoController : Controller
         }
 
         var recurso = await _context.Recursos
+            .Include(r => r.Habilidad)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (recurso == null)
         {
             return NotFound();
@@ -39,6 +44,7 @@ public class RecursoController : Controller
     // GET: RECURSOS/Create
     public IActionResult Create()
     {
+        ViewData["HabilidadId"] = new SelectList(_context.Habilidades, "Id", "Titulo");
         return View();
     }
 
@@ -149,6 +155,21 @@ public class RecursoController : Controller
     private bool RecursoExists(int? id)
     {
         return _context.Recursos.Any(e => e.Id == id);
+    }
+    // POST: Recurso/ToggleCompletado/5
+    [HttpPost]
+    public async Task<IActionResult> ToggleCompletado(int id)
+    {
+        var recurso = await _context.Recursos.FindAsync(id);
+        if (recurso == null)
+        {
+            return NotFound();
+        }
+
+        recurso.Completado = !recurso.Completado;
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
 
 }

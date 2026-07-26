@@ -1,0 +1,70 @@
+﻿@model DevPath.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header text-white text-center fw-bold py-3"
+                 style="background-color: #002060;">
+                <h4 class="mb-0">🚀 Crear cuenta en DevPath</h4>
+                <small class="opacity-75">
+                    Organiza tu aprendizaje autónomo
+                </small>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control"
+                               placeholder="tu@email.com" />
+                        <span asp-validation-for="Email"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control"
+                               placeholder="Mínimo 6 caracteres" />
+                        <span asp-validation-for="Password"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword"
+                               class="form-label"></label>
+                        <input asp-for="ConfirmPassword"
+                               class="form-control"
+                               placeholder="Repite tu contraseña" />
+                        <span asp-validation-for="ConfirmPassword"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-lg text-white"
+                                style="background-color: #002060;">
+                            Crear cuenta
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-white border-0 pb-3">
+                <span class="text-muted small">¿Ya tienes cuenta?</span>
+                <a asp-action="Login" class="small fw-bold">
+                    Inicia sesión aquí
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

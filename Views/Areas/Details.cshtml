@@ -1,45 +1,123 @@
 @model DevPath.Models.Area
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle del Área";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Area</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Habilidades)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Habilidades)
-        </dd>
-    </dl>
+<!-- Header del área -->
+<div class="p-4 mb-4 rounded-3 text-white"
+     style="background-color: @Model.Color;">
+    <h2 class="fw-bold" style="text-shadow: 0px 1px 2px rgba(0,0,0,0.4);">
+        @Model.Nombre
+    </h2>
+    <p class="mb-0 opacity-75">
+        @(string.IsNullOrEmpty(Model.Descripcion)
+            ? "Sin descripción" : Model.Descripcion)
+    </p>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<!-- Resumen -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body">
+                <p class="display-5 fw-bold mb-0"
+                   style="color: @Model.Color;">
+                    @Model.Habilidades.Count
+                </p>
+                <p class="text-muted mb-0">Habilidades</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body">
+                <p class="display-5 fw-bold mb-0"
+                   style="color: @Model.Color;">
+                    @Model.Habilidades.Count(h => h.Estado == "Completado")
+                </p>
+                <p class="text-muted mb-0">Completadas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center">
+            <div class="card-body">
+                <p class="display-5 fw-bold mb-0"
+                   style="color: @Model.Color;">
+                    @Model.Habilidades.Sum(h => h.Recursos.Count)
+                </p>
+                <p class="text-muted mb-0">Recursos totales</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Habilidades del área -->
+<h5 class="fw-bold mb-3" style="color: #002060;">
+    Habilidades en esta área
+</h5>
+
+@if (!Model.Habilidades.Any())
+{
+    <div class="alert alert-info">
+        Esta área no tiene habilidades todavía.
+        <a asp-controller="Habilidad" asp-action="Create">
+            Agregar una habilidad
+        </a>.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var hab in Model.Habilidades)
+        {
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100"
+                     style="border-left: 4px solid @Model.Color !important;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between
+                            align-items-start mb-2">
+                            <h6 class="fw-bold mb-0">@hab.Titulo</h6>
+                            @{
+                                var badgeClass = hab.Estado switch
+                                {
+                                    "Completado" => "bg-success",
+                                    "En progreso" => "bg-warning text-dark",
+                                    _ => "bg-secondary"
+                                };
+                            }
+                            <span class="badge @badgeClass">@hab.Estado</span>
+                        </div>
+                        <small class="text-muted">Nivel: @hab.Nivel</small>
+                        <div class="progress mt-2" style="height: 14px;">
+                            <div class="progress-bar" role="progressbar"
+                                 style="width: @hab.PorcentajeProgreso%;
+                                background-color: @Model.Color;"
+                                 aria-valuenow="@hab.PorcentajeProgreso"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                @hab.PorcentajeProgreso%
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <a asp-controller="Habilidad"
+                               asp-action="Details"
+                               asp-route-id="@hab.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Ver detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Botones -->
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id"
+       class="btn btn-primary">Editar</a>
+    <a asp-action="Index"
+       class="btn btn-secondary">Volver a Áreas</a>
 </div>

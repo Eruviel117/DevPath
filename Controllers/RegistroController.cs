@@ -3,7 +3,9 @@ using DevPath.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class RegistroController : Controller
 {
     private readonly DevPathContext _context;
@@ -31,7 +33,9 @@ public class RegistroController : Controller
         }
 
         var registro = await _context.Registros
+            .Include(r => r.Habilidad)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (registro == null)
         {
             return NotFound();
