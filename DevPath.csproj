@@ -20,4 +20,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- DevPath.Tests vive dentro de esta misma carpeta, pero es un proyecto
+       aparte. Sin esto, el globbing por defecto del SDK intenta compilar
+       los archivos de prueba (que usan xUnit) dentro de este proyecto. -->
+  <ItemGroup>
+    <Compile Remove="DevPath.Tests/**/*.cs" />
+    <Content Remove="DevPath.Tests/**/*" />
+    <None Remove="DevPath.Tests/**/*" />
+    <EmbeddedResource Remove="DevPath.Tests/**/*" />
+  </ItemGroup>
+
 </Project>
