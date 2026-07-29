@@ -16,6 +16,11 @@ namespace DevPath.Models
         [Display(Name = "Color")]
         public string Color { get; set; } = "#00B0F0";
 
+        // Dueño del registro — nunca se expone en formularios (no está en
+        // ningún [Bind]). Se asigna en el controlador a partir del usuario
+        // autenticado.
+        public string UserId { get; set; } = string.Empty;
+
         // Relación: un área tiene muchas habilidades
         public ICollection<Habilidad> Habilidades { get; set; } = new List<Habilidad>();
     }

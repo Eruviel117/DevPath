@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [Authorize]
 public class HabilidadController : Controller
@@ -19,10 +20,16 @@ public class HabilidadController : Controller
         _decorator = decorator;
     }
 
+    // Id del usuario autenticado. Todas las consultas de este controlador
+    // se filtran por este valor para que cada usuario solo vea sus propias
+    // Habilidades.
+    private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
     // GET: HABILIDADS
     public async Task<IActionResult> Index(int? areaId, string? nivel, string? estado)
     {
         var query = _context.Habilidades
+            .Where(h => h.UserId == CurrentUserId)
             .Include(h => h.Area)
             .Include(h => h.Recursos)
             .AsQueryable();
@@ -42,7 +49,8 @@ public class HabilidadController : Controller
             query = query.Where(h => h.Estado == estado);
         }
 
-        ViewData["Areas"] = new SelectList(_context.Areas, "Id", "Nombre", areaId);
+        ViewData["Areas"] = new SelectList(
+            _context.Areas.Where(a => a.UserId == CurrentUserId), "Id", "Nombre", areaId);
         ViewData["NivelSeleccionado"] = nivel;
         ViewData["EstadoSeleccionado"] = estado;
 
@@ -62,7 +70,7 @@ public class HabilidadController : Controller
             .Include(h => h.Area)
             .Include(h => h.Recursos)
             .Include(h => h.Registros)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
 
         if (habilidad == null)
         {
@@ -81,7 +89,8 @@ public class HabilidadController : Controller
     // GET: HABILIDADS/Create
     public IActionResult Create()
     {
-        ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Nombre");
+        ViewData["AreaId"] = new SelectList(
+            _context.Areas.Where(a => a.UserId == CurrentUserId), "Id", "Nombre");
         return View();
     }
 
@@ -92,11 +101,24 @@ public class HabilidadController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Titulo,Descripcion,Nivel,Estado,AreaId")] Habilidad habilidad)
     {
+        // El Área elegida debe pertenecer al usuario actual — si no,
+        // alguien podría intentar colgar una Habilidad de un Área ajena
+        // manipulando el formulario.
+        var areaValida = await _context.Areas
+            .AnyAsync(a => a.Id == habilidad.AreaId && a.UserId == CurrentUserId);
+        if (!areaValida)
+        {
+            ModelState.AddModelError(nameof(Habilidad.AreaId), "Área inválida.");
+        }
+
         if (ModelState.IsValid)
         {
+            habilidad.UserId = CurrentUserId;
             await _decorator.GuardarHabilidadAsync(habilidad);
             return RedirectToAction(nameof(Index));
         }
+        ViewData["AreaId"] = new SelectList(
+            _context.Areas.Where(a => a.UserId == CurrentUserId), "Id", "Nombre", habilidad.AreaId);
         return View(habilidad);
     }
 
@@ -108,12 +130,14 @@ public class HabilidadController : Controller
             return NotFound();
         }
 
-        var habilidad = await _context.Habilidades.FindAsync(id);
+        var habilidad = await _context.Habilidades
+            .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
         if (habilidad == null)
         {
             return NotFound();
         }
-        ViewData["AreaId"] = new SelectList(_context.Areas, "Id", "Nombre", habilidad.AreaId);
+        ViewData["AreaId"] = new SelectList(
+            _context.Areas.Where(a => a.UserId == CurrentUserId), "Id", "Nombre", habilidad.AreaId);
         return View(habilidad);
     }
 
@@ -122,17 +146,33 @@ public class HabilidadController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Titulo,Descripcion,Nivel,Estado,AreaId,Area,Recursos,Registros")] Habilidad habilidad)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Titulo,Descripcion,Nivel,Estado,AreaId")] Habilidad habilidad)
     {
         if (id != habilidad.Id)
         {
             return NotFound();
         }
 
+        var existe = await _context.Habilidades
+            .AsNoTracking()
+            .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
+        if (existe == null)
+        {
+            return NotFound();
+        }
+
+        var areaValida = await _context.Areas
+            .AnyAsync(a => a.Id == habilidad.AreaId && a.UserId == CurrentUserId);
+        if (!areaValida)
+        {
+            ModelState.AddModelError(nameof(Habilidad.AreaId), "Área inválida.");
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
+                habilidad.UserId = CurrentUserId;
                 _context.Update(habilidad);
                 await _context.SaveChangesAsync();
             }
@@ -149,6 +189,8 @@ public class HabilidadController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
+        ViewData["AreaId"] = new SelectList(
+            _context.Areas.Where(a => a.UserId == CurrentUserId), "Id", "Nombre", habilidad.AreaId);
         return View(habilidad);
     }
 
@@ -161,7 +203,7 @@ public class HabilidadController : Controller
         }
 
         var habilidad = await _context.Habilidades
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (habilidad == null)
         {
             return NotFound();
@@ -175,7 +217,8 @@ public class HabilidadController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var habilidad = await _context.Habilidades.FindAsync(id);
+        var habilidad = await _context.Habilidades
+            .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
         if (habilidad != null)
         {
             await _decorator.EliminarHabilidadAsync(habilidad);
@@ -185,6 +228,6 @@ public class HabilidadController : Controller
 
     private bool HabilidadExists(int? id)
     {
-        return _context.Habilidades.Any(e => e.Id == id);
+        return _context.Habilidades.Any(e => e.Id == id && e.UserId == CurrentUserId);
     }
 }

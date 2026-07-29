@@ -17,5 +17,10 @@ namespace DevPath.Models
         [Display(Name = "Habilidad")]
         public int HabilidadId { get; set; }
         public Habilidad? Habilidad { get; set; }
+
+        // Dueño del registro — nunca se expone en formularios (no está en
+        // ningún [Bind]). Se asigna en el controlador a partir del usuario
+        // autenticado.
+        public string UserId { get; set; } = string.Empty;
     }
 }
