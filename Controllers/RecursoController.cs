@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [Authorize]
 public class RecursoController : Controller
@@ -15,10 +16,19 @@ public class RecursoController : Controller
         _context = context;
     }
 
+    // Id del usuario autenticado. Todas las consultas de este controlador
+    // se filtran por este valor para que cada usuario solo vea sus propios
+    // Recursos.
+    private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
     // GET: RECURSOS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
-        return View(await _context.Recursos.ToListAsync());
+        var recursos = await _context.Recursos
+            .Where(r => r.UserId == CurrentUserId)
+            .Include(r => r.Habilidad)
+            .ToListAsync();
+        return View(recursos);
     }
 
     // GET: RECURSOS/Details/5
@@ -31,7 +41,7 @@ public class RecursoController : Controller
 
         var recurso = await _context.Recursos
             .Include(r => r.Habilidad)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
 
         if (recurso == null)
         {
@@ -44,7 +54,8 @@ public class RecursoController : Controller
     // GET: RECURSOS/Create
     public IActionResult Create()
     {
-        ViewData["HabilidadId"] = new SelectList(_context.Habilidades, "Id", "Titulo");
+        ViewData["HabilidadId"] = new SelectList(
+            _context.Habilidades.Where(h => h.UserId == CurrentUserId), "Id", "Titulo");
         return View();
     }
 
@@ -55,14 +66,23 @@ public class RecursoController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Nombre,Url,Tipo,Completado,HabilidadId")] Recurso recurso)
     {
-
+        // La Habilidad elegida debe pertenecer al usuario actual.
+        var habilidadValida = await _context.Habilidades
+            .AnyAsync(h => h.Id == recurso.HabilidadId && h.UserId == CurrentUserId);
+        if (!habilidadValida)
+        {
+            ModelState.AddModelError(nameof(Recurso.HabilidadId), "Habilidad inválida.");
+        }
 
         if (ModelState.IsValid)
         {
+            recurso.UserId = CurrentUserId;
             _context.Add(recurso);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        ViewData["HabilidadId"] = new SelectList(
+            _context.Habilidades.Where(h => h.UserId == CurrentUserId), "Id", "Titulo", recurso.HabilidadId);
         return View(recurso);
     }
 
@@ -75,11 +95,14 @@ public class RecursoController : Controller
             return NotFound();
         }
 
-        var recurso = await _context.Recursos.FindAsync(id);
+        var recurso = await _context.Recursos
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == CurrentUserId);
         if (recurso == null)
         {
             return NotFound();
         }
+        ViewData["HabilidadId"] = new SelectList(
+            _context.Habilidades.Where(h => h.UserId == CurrentUserId), "Id", "Titulo", recurso.HabilidadId);
         return View(recurso);
     }
 
@@ -96,10 +119,26 @@ public class RecursoController : Controller
             return NotFound();
         }
 
+        var existe = await _context.Recursos
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == CurrentUserId);
+        if (existe == null)
+        {
+            return NotFound();
+        }
+
+        var habilidadValida = await _context.Habilidades
+            .AnyAsync(h => h.Id == recurso.HabilidadId && h.UserId == CurrentUserId);
+        if (!habilidadValida)
+        {
+            ModelState.AddModelError(nameof(Recurso.HabilidadId), "Habilidad inválida.");
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
+                recurso.UserId = CurrentUserId;
                 _context.Update(recurso);
                 await _context.SaveChangesAsync();
             }
@@ -116,6 +155,8 @@ public class RecursoController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
+        ViewData["HabilidadId"] = new SelectList(
+            _context.Habilidades.Where(h => h.UserId == CurrentUserId), "Id", "Titulo", recurso.HabilidadId);
         return View(recurso);
     }
 
@@ -128,7 +169,7 @@ public class RecursoController : Controller
         }
 
         var recurso = await _context.Recursos
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (recurso == null)
         {
             return NotFound();
@@ -142,7 +183,8 @@ public class RecursoController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var recurso = await _context.Recursos.FindAsync(id);
+        var recurso = await _context.Recursos
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == CurrentUserId);
         if (recurso != null)
         {
             _context.Recursos.Remove(recurso);
@@ -154,13 +196,15 @@ public class RecursoController : Controller
 
     private bool RecursoExists(int? id)
     {
-        return _context.Recursos.Any(e => e.Id == id);
+        return _context.Recursos.Any(e => e.Id == id && e.UserId == CurrentUserId);
     }
+
     // POST: Recurso/ToggleCompletado/5
     [HttpPost]
     public async Task<IActionResult> ToggleCompletado(int id)
     {
-        var recurso = await _context.Recursos.FindAsync(id);
+        var recurso = await _context.Recursos
+            .FirstOrDefaultAsync(r => r.Id == id && r.UserId == CurrentUserId);
         if (recurso == null)
         {
             return NotFound();

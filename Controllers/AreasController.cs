@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 [Authorize]
 public class AreasController : Controller
@@ -15,10 +16,16 @@ public class AreasController : Controller
         _context = context;
     }
 
+    // Id del usuario autenticado. Todas las consultas de este controlador
+    // se filtran por este valor para que cada usuario solo vea sus propias
+    // Áreas.
+    private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
     // GET: AREAS
     public async Task<IActionResult> Index()
     {
         var areas = await _context.Areas
+            .Where(a => a.UserId == CurrentUserId)
             .Include(a => a.Habilidades)
             .ToListAsync();
         return View(areas);
@@ -34,7 +41,7 @@ public class AreasController : Controller
         var area = await _context.Areas
             .Include(a => a.Habilidades)
                 .ThenInclude(h => h.Recursos)
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
 
         if (area == null)
         {
@@ -42,6 +49,12 @@ public class AreasController : Controller
         }
 
         return View(area);
+    }
+
+    // GET: AREAS/Create
+    public IActionResult Create()
+    {
+        return View();
     }
 
     // POST: AREAS/Create
@@ -53,6 +66,7 @@ public class AreasController : Controller
     {
         if (ModelState.IsValid)
         {
+            area.UserId = CurrentUserId;
             _context.Add(area);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -68,7 +82,8 @@ public class AreasController : Controller
             return NotFound();
         }
 
-        var area = await _context.Areas.FindAsync(id);
+        var area = await _context.Areas
+            .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
         if (area == null)
         {
             return NotFound();
@@ -88,10 +103,19 @@ public class AreasController : Controller
             return NotFound();
         }
 
+        var existe = await _context.Areas
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
+        if (existe == null)
+        {
+            return NotFound();
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
+                area.UserId = CurrentUserId;
                 _context.Update(area);
                 await _context.SaveChangesAsync();
             }
@@ -120,7 +144,7 @@ public class AreasController : Controller
         }
 
         var area = await _context.Areas
-            .FirstOrDefaultAsync(m => m.Id == id);
+            .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (area == null)
         {
             return NotFound();
@@ -134,7 +158,8 @@ public class AreasController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var area = await _context.Areas.FindAsync(id);
+        var area = await _context.Areas
+            .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
         if (area != null)
         {
             _context.Areas.Remove(area);
@@ -146,6 +171,6 @@ public class AreasController : Controller
 
     private bool AreaExists(int? id)
     {
-        return _context.Areas.Any(e => e.Id == id);
+        return _context.Areas.Any(e => e.Id == id && e.UserId == CurrentUserId);
     }
 }

@@ -27,6 +27,11 @@ namespace DevPath.Models
         public int AreaId { get; set; }
         public Area? Area { get; set; }
 
+        // Dueño del registro — nunca se expone en formularios (no está en
+        // ningún [Bind]). Se asigna en el controlador a partir del usuario
+        // autenticado.
+        public string UserId { get; set; } = string.Empty;
+
         // Relación: una habilidad tiene muchos recursos
         public ICollection<Recurso> Recursos { get; set; } = new List<Recurso>();
 
