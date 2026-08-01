@@ -169,6 +169,7 @@ public class RecursoController : Controller
         }
 
         var recurso = await _context.Recursos
+            .Include(r => r.Habilidad)
             .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (recurso == null)
         {

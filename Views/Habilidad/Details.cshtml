@@ -15,7 +15,7 @@
         <div class="card border-0 shadow-sm h-100">
             <div class="card-header text-white fw-bold"
                  style="background-color: #002060;">
-                Información general
+                <i class="bi bi-info-circle"></i> Información general
             </div>
             <div class="card-body">
 
@@ -81,7 +81,7 @@
              style="border-left: 5px solid @nivelColor !important;">
             <div class="card-header fw-bold text-white"
                  style="background-color: @nivelColor;">
-                 Info del nivel — @Model.Nivel
+                <i class="bi bi-lightning-charge"></i> Info del nivel — @Model.Nivel
             </div>
             <div class="card-body">
                 <p class="text-muted small mb-3">
@@ -105,7 +105,7 @@
 <!-- Recursos vinculados -->
 <div class="mt-4">
     <h5 class="fw-bold" style="color: #002060;">
-        Recursos vinculados
+        <i class="bi bi-journal-bookmark"></i> Recursos vinculados
     </h5>
     @if (!Model.Recursos.Any())
     {
@@ -152,7 +152,7 @@
                                 @if (recurso.Completado)
                                 {
                                     <span class="badge bg-success">
-                                        Completado ✅
+                                        <i class="bi bi-check-circle"></i> Completado
                                     </span>
                                 }
                                 else
@@ -173,7 +173,7 @@
 <!-- Registros de avance -->
 <div class="mt-4">
     <h5 class="fw-bold" style="color: #002060;">
-        Registros de avance
+        <i class="bi bi-clipboard-check"></i> Registros de avance
     </h5>
     @if (!Model.Registros.Any())
     {

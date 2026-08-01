@@ -1,85 +1,131 @@
-﻿@model DevPath.Models.EstadisticasViewModel
+@model DevPath.Models.EstadisticasViewModel
 
 @{
     ViewData["Title"] = "Estadísticas";
 }
 
-<h2> Estadísticas Generales</h2>
-<hr />
+<h2 class="mb-4">
+    <i class="bi bi-bar-chart"></i> Estadísticas Generales
+</h2>
 
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Áreas</h5>
-                <p class="display-4">@Model.TotalAreas</p>
+<!-- Totales -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#e7ecff; color:#3355ff;">
+                <i class="bi bi-folder2"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@Model.TotalAreas</p>
+                <p class="devpath-stat-label">Áreas</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Habilidades</h5>
-                <p class="display-4">@Model.TotalHabilidades</p>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#e0f2ff; color:#0d6efd;">
+                <i class="bi bi-bullseye"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@Model.TotalHabilidades</p>
+                <p class="devpath-stat-label">Habilidades</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Recursos</h5>
-                <p class="display-4">@Model.TotalRecursos</p>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#f3e8ff; color:#8b5cf6;">
+                <i class="bi bi-journal-bookmark"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@Model.TotalRecursos</p>
+                <p class="devpath-stat-label">Recursos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#d1f7e0; color:#16A34A;">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@Model.RecursosCompletados</p>
+                <p class="devpath-stat-label">Recursos completados</p>
             </div>
         </div>
     </div>
 </div>
 
-<h4>Habilidades por estado</h4>
-<div class="row mb-4">
+<!-- Habilidades por estado -->
+<h5 class="fw-bold mb-3" style="color:#002060;">
+    <i class="bi bi-list-check"></i> Habilidades por estado
+</h5>
+<div class="row g-3 mb-4">
     <div class="col-md-4">
-        <div class="alert alert-secondary text-center">
-            <strong>Pendiente</strong><br />
-            @Model.HabilidadesPendientes
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="alert alert-warning text-center">
-            <strong>En progreso</strong><br />
-            @Model.HabilidadesEnProgreso
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="alert alert-success text-center">
-            <strong>Completado</strong><br />
-            @Model.HabilidadesCompletadas
-        </div>
-    </div>
-</div>
-
-<h4>Progreso por área</h4>
-@if (!Model.ProgresoPorArea.Any())
-{
-    <p class="text-muted">Todavía no hay áreas registradas.</p>
-}
-else
-{
-    @foreach (var area in Model.ProgresoPorArea)
-    {
-        <div class="mb-3">
-            <div class="d-flex justify-content-between">
-                <strong>@area.NombreArea</strong>
-                <span>@area.HabilidadesCompletadas / @area.TotalHabilidades completadas</span>
-            </div>
-            <div class="progress" style="height: 20px;">
-                <div class="progress-bar" role="progressbar"
-                     style="width: @area.PorcentajeCompletado%; background-color: @area.Color;"
-                     aria-valuenow="@area.PorcentajeCompletado" aria-valuemin="0" aria-valuemax="100">
-                    @area.PorcentajeCompletado%
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-secondary fs-4 px-3 py-2">@Model.HabilidadesPendientes</span>
+                <div>
+                    <p class="fw-bold mb-0">Pendientes</p>
+                    <p class="text-muted small mb-0">Sin comenzar</p>
                 </div>
             </div>
         </div>
-    }
-}
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-warning text-dark fs-4 px-3 py-2">@Model.HabilidadesEnProgreso</span>
+                <div>
+                    <p class="fw-bold mb-0">En progreso</p>
+                    <p class="text-muted small mb-0">Trabajando en ello</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <span class="badge bg-success fs-4 px-3 py-2">@Model.HabilidadesCompletadas</span>
+                <div>
+                    <p class="fw-bold mb-0">Completadas</p>
+                    <p class="text-muted small mb-0">¡Listo!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<h4 class="mt-4">Recursos completados</h4>
-<p>@Model.RecursosCompletados de @Model.TotalRecursos recursos marcados como completados.</p>
+<!-- Progreso por área -->
+<h5 class="fw-bold mb-3" style="color:#002060;">
+    <i class="bi bi-graph-up"></i> Progreso por área
+</h5>
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        @if (!Model.ProgresoPorArea.Any())
+        {
+            <p class="text-muted mb-0">Todavía no hay áreas registradas.</p>
+        }
+        else
+        {
+            @foreach (var area in Model.ProgresoPorArea)
+            {
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <strong>@area.NombreArea</strong>
+                        <span class="text-muted small">
+                            @area.HabilidadesCompletadas / @area.TotalHabilidades completadas
+                        </span>
+                    </div>
+                    <div class="progress" style="height: 18px;">
+                        <div class="progress-bar" role="progressbar"
+                             style="width: @area.PorcentajeCompletado%; background-color: @area.Color;"
+                             aria-valuenow="@area.PorcentajeCompletado" aria-valuemin="0" aria-valuemax="100">
+                            @area.PorcentajeCompletado%
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

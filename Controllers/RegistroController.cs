@@ -167,6 +167,7 @@ public class RegistroController : Controller
         }
 
         var registro = await _context.Registros
+            .Include(r => r.Habilidad)
             .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (registro == null)
         {

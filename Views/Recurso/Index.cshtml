@@ -2,75 +2,128 @@
 
 @{
     ViewData["Title"] = "Recursos";
+    var lista = Model.ToList();
+    var totalCount = lista.Count;
+    var completadosCount = lista.Count(r => r.Completado);
+    var pendientesCount = totalCount - completadosCount;
 }
 
-<h2>Mis Recursos</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Mis Recursos</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nuevo Recurso
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ Nuevo Recurso</a>
-</p>
+<!-- Resumen rápido -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#e7ecff; color:#3355ff;">
+                <i class="bi bi-journal-bookmark"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@totalCount</p>
+                <p class="devpath-stat-label">Total</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#eceef1; color:#6c757d;">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@pendientesCount</p>
+                <p class="devpath-stat-label">Pendientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#d1f7e0; color:#16A34A;">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@completadosCount</p>
+                <p class="devpath-stat-label">Completados</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-@if (!Model.Any())
+@if (!lista.Any())
 {
-    <div class="alert alert-info">
-        Todavía no hay recursos registrados.
-        <a asp-action="Create">Agrega tu primer recurso</a>.
+    <div class="devpath-empty">
+        <div class="devpath-empty-icon"><i class="bi bi-journal-plus"></i></div>
+        <p class="devpath-empty-title">Todavía no hay recursos registrados</p>
+        <p class="devpath-empty-text">Guarda videos, artículos o cursos vinculados a tus habilidades.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Agrega tu primer recurso
+        </a>
     </div>
 }
 else
 {
-    <table class="table table-hover align-middle">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Habilidad</th>
-                <th>Tipo</th>
-                <th>URL</th>
-                <th>Estado</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Nombre</td>
-                    <td>@item.Habilidad?.Titulo</td>
-                    <td>
-                        <span class="badge bg-secondary">@item.Tipo</span>
-                    </td>
-                    <td>
+    var tipoIcono = new Dictionary<string, string>
+    {
+        ["Curso"] = "bi-mortarboard",
+        ["Video"] = "bi-camera-reels",
+        ["Libro"] = "bi-book",
+        ["Artículo"] = "bi-file-text",
+        ["Otro"] = "bi-link-45deg"
+    };
+
+    <div class="row g-3">
+        @foreach (var item in lista)
+        {
+            var icono = tipoIcono.TryGetValue(item.Tipo, out var i) ? i : "bi-link-45deg";
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm devpath-hover-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="devpath-stat-icon devpath-stat-icon-sm" style="background-color:#e7ecff; color:#3355ff;">
+                                    <i class="bi @icono"></i>
+                                </span>
+                                <h6 class="card-title mb-0">@item.Nombre</h6>
+                            </div>
+                        </div>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-bullseye"></i> @item.Habilidad?.Titulo
+                        </p>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-secondary">@item.Tipo</span>
+                            @if (item.Completado)
+                            {
+                                <span class="badge bg-success">✅ Completado</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border">⏳ Pendiente</span>
+                            }
+                        </div>
                         @if (!string.IsNullOrEmpty(item.Url))
                         {
-                            <a href="@item.Url" target="_blank">
-                                Ver recurso 🔗
+                            <a href="@item.Url" target="_blank" class="small">
+                                <i class="bi bi-box-arrow-up-right"></i> Ver recurso
                             </a>
                         }
-                        else
-                        {
-                            <span class="text-muted">Sin URL</span>
-                        }
-                    </td>
-                    <td>
-                        <form asp-action="ToggleCompletado" asp-route-id="@item.Id"
-                              method="post" style="display:inline;">
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 d-flex flex-wrap gap-1">
+                        <form asp-action="ToggleCompletado" asp-route-id="@item.Id" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit"
-                                    class="btn btn-sm @(item.Completado ? "btn-success" : "btn-outline-secondary")">
-                                @(item.Completado ? "✅ Completado" : "⏳ Pendiente")
+                                    class="btn btn-sm @(item.Completado ? "btn-outline-secondary" : "btn-outline-success")">
+                                @(item.Completado ? "Marcar pendiente" : "Marcar completado")
                             </button>
                         </form>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-primary">Editar</a>
-                        <a asp-action="Details" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-secondary">Ver</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-danger">Eliminar</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 }

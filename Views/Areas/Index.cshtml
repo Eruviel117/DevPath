@@ -12,9 +12,13 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        Todavía no tienes áreas creadas.
-        <a asp-action="Create">Crea tu primera área</a>.
+    <div class="devpath-empty">
+        <div class="devpath-empty-icon"><i class="bi bi-folder2-open"></i></div>
+        <p class="devpath-empty-title">Todavía no tienes áreas creadas</p>
+        <p class="devpath-empty-text">Las áreas te ayudan a organizar tus habilidades por tema.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Crea tu primera área
+        </a>
     </div>
 }
 else

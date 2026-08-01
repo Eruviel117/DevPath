@@ -18,7 +18,283 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 0;
+  background-color: #F4F6F9;
+}
+
+/* ---------- Layout general: sidebar + contenido ---------- */
+
+.devpath-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.devpath-sidebar,
+.devpath-sidebar-offcanvas {
+  width: 250px;
+  flex-shrink: 0;
+  background-color: #0B1437;
+  border-right: none;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.devpath-sidebar-offcanvas {
+  position: fixed;
+}
+
+.devpath-sidebar-brand {
+  padding: 1.25rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.devpath-brand-text {
+  color: #ffffff;
+}
+
+.devpath-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 0.6rem;
+  background: linear-gradient(135deg, #00B0F0, #3355ff);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.devpath-sidebar-nav {
+  flex: 1;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.devpath-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  color: #a9b4d0;
+  text-decoration: none;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.devpath-nav-link i {
+  font-size: 1.05rem;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.devpath-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.devpath-nav-link.active {
+  background-color: rgba(0, 176, 240, 0.18);
+  color: #ffffff;
+  font-weight: 700;
+  border-left: 3px solid #00B0F0;
+}
+
+.devpath-user-block {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.devpath-user-email {
+  color: #ffffff;
+}
+
+.offcanvas.devpath-sidebar-offcanvas .offcanvas-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.devpath-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #002060;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.devpath-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.devpath-main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.devpath-mobile-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.devpath-footer {
+  padding: 1rem 2rem;
+  border-top: 1px solid #e9ecef;
+  font-size: 0.85rem;
+}
+
+/* Tarjetas un poco más redondeadas en todo el sitio */
+.card {
+  border-radius: 0.9rem;
+}
+
+.devpath-hover-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.devpath-hover-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Tarjetas de resumen (stat cards) */
+.devpath-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background-color: #ffffff;
+  border-radius: 0.9rem;
+  padding: 1rem 1.15rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+  height: 100%;
+}
+
+.devpath-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 0.75rem;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.devpath-stat-icon-sm {
+  width: 34px;
+  height: 34px;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+}
+
+.devpath-stat-number {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  line-height: 1.1;
+  color: #212529;
+}
+
+.devpath-stat-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+/* ---------- Estados vacíos ---------- */
+
+.devpath-empty {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.9rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.devpath-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #e7ecff;
+  color: #3355ff;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.devpath-empty-title {
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 0.35rem;
+}
+
+.devpath-empty-text {
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+/* ---------- Pantallas de acceso (login/registro) ---------- */
+
+.devpath-auth-body {
+  background: linear-gradient(160deg, #0B1437 0%, #002060 45%, #00B0F0 130%);
+  min-height: 100vh;
+  margin-bottom: 0;
+}
+
+.devpath-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.devpath-auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 1.75rem;
+}
+
+.devpath-auth-footer {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.devpath-auth-footer a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.devpath-auth-card-wrap {
+  width: 100%;
+  max-width: 480px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

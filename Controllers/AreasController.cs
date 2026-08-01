@@ -144,6 +144,7 @@ public class AreasController : Controller
         }
 
         var area = await _context.Areas
+            .Include(a => a.Habilidades)
             .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (area == null)
         {

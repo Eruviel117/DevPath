@@ -2,17 +2,71 @@
 
 @model IEnumerable<DevPath.Models.Habilidad>
 
-
 @{
     ViewData["Title"] = "Habilidades";
+    var lista = Model.ToList();
+    var totalCount = lista.Count;
+    var pendientesCount = lista.Count(h => h.Estado == "Pendiente");
+    var progresoCount = lista.Count(h => h.Estado == "En progreso");
+    var completadasCount = lista.Count(h => h.Estado == "Completado");
 }
 
-<h2>Mis Habilidades</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Mis Habilidades</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nueva Habilidad
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ Nueva Habilidad</a>
-</p>
+<!-- Resumen rápido -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#e7ecff; color:#3355ff;">
+                <i class="bi bi-collection"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@totalCount</p>
+                <p class="devpath-stat-label">Total</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#eceef1; color:#6c757d;">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@pendientesCount</p>
+                <p class="devpath-stat-label">Pendientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#fff3cd; color:#997404;">
+                <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@progresoCount</p>
+                <p class="devpath-stat-label">En progreso</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#d1f7e0; color:#16A34A;">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@completadasCount</p>
+                <p class="devpath-stat-label">Completadas</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Filtros -->
 <form asp-action="Index" method="get" class="row g-2 mb-4">
     <div class="col-md-3">
         <select name="areaId" class="form-select" onchange="this.form.submit()">
@@ -44,56 +98,62 @@
     </div>
 </form>
 
-<table class="table table-hover align-middle">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Área</th>
-            <th>Nivel</th>
-            <th>Estado</th>
-            <th>Progreso</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (!Model.Any())
+@if (!lista.Any())
+{
+    <div class="devpath-empty">
+        <div class="devpath-empty-icon"><i class="bi bi-search"></i></div>
+        <p class="devpath-empty-title">No hay habilidades que coincidan</p>
+        <p class="devpath-empty-text">Prueba a cambiar o limpiar los filtros para ver más resultados.</p>
+        <a asp-action="Index" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-counterclockwise"></i> Limpiar filtros
+        </a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var item in lista)
         {
-            <tr>
-                <td colspan="6" class="text-center text-muted">No hay habilidades que coincidan con el filtro.</td>
-            </tr>
-        }
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Titulo</td>
-                <td>@item.Area?.Nombre</td>
-                <td>@item.Nivel</td>
-                <td>
-                    @{
-                        var badgeClass = item.Estado switch
-                        {
-                            "Completado" => "bg-success",
-                            "En progreso" => "bg-warning text-dark",
-                            _ => "bg-secondary"
-                        };
-                    }
-                    <span class="badge @badgeClass">@item.Estado</span>
-                </td>
-                <td style="width: 180px;">
-                    <div class="progress" style="height: 18px;">
-                        <div class="progress-bar bg-info" role="progressbar"
-                             style="width: @item.PorcentajeProgreso%;"
-                             aria-valuenow="@item.PorcentajeProgreso" aria-valuemin="0" aria-valuemax="100">
-                            @item.PorcentajeProgreso%
+            var badgeClass = item.Estado switch
+            {
+                "Completado" => "bg-success",
+                "En progreso" => "bg-warning text-dark",
+                _ => "bg-secondary"
+            };
+            var nivelColor = item.Nivel switch
+            {
+                "Avanzado" => "#991B1B",
+                "Intermedio" => "#D97706",
+                _ => "#16A34A"
+            };
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm devpath-hover-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">@item.Titulo</h5>
+                            <span class="badge @badgeClass">@item.Estado</span>
                         </div>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-folder2"></i> @item.Area?.Nombre
+                        </p>
+                        <span class="badge rounded-pill mb-3" style="background-color:@nivelColor;">
+                            @item.Nivel
+                        </span>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-info" role="progressbar"
+                                 style="width: @item.PorcentajeProgreso%;"
+                                 aria-valuenow="@item.PorcentajeProgreso" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <p class="text-muted small mt-1 mb-0">@item.PorcentajeProgreso% de progreso</p>
                     </div>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Editar</a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
-                </td>
-            </tr>
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+}

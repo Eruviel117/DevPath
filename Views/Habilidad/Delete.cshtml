@@ -1,82 +1,52 @@
 @model DevPath.Models.Habilidad
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Habilidad";
 }
 
-<h1>Delete</h1>
+<h2>Eliminar Habilidad</h2>
+<hr />
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>DevPath.Models.Habilidad</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nivel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nivel)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AreaId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AreaId)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Area)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Area)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Recursos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Recursos)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Registros)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Registros)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-danger shadow-sm">
+            <div class="card-header bg-danger text-white fw-bold">
+                ⚠️ ¿Seguro que quieres eliminar esta habilidad?
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Esta acción no se puede deshacer.
+                    @if (Model.Recursos.Any() || Model.Registros.Any())
+                    {
+                        <strong>
+                            Se eliminarán también sus @Model.Recursos.Count
+                            recurso(s) y @Model.Registros.Count registro(s)
+                            de avance.
+                        </strong>
+                    }
+                </p>
+
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Título</dt>
+                    <dd class="col-sm-8">@Model.Titulo</dd>
+
+                    <dt class="col-sm-4">Nivel</dt>
+                    <dd class="col-sm-8">@Model.Nivel</dd>
+
+                    <dt class="col-sm-4">Estado</dt>
+                    <dd class="col-sm-8">@Model.Estado</dd>
+
+                    <dt class="col-sm-4">Área</dt>
+                    <dd class="col-sm-8">@Model.Area?.Nombre</dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-white">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Sí, eliminar" class="btn btn-danger" />
+                    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

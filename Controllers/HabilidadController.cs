@@ -203,6 +203,9 @@ public class HabilidadController : Controller
         }
 
         var habilidad = await _context.Habilidades
+            .Include(h => h.Area)
+            .Include(h => h.Recursos)
+            .Include(h => h.Registros)
             .FirstOrDefaultAsync(m => m.Id == id && m.UserId == CurrentUserId);
         if (habilidad == null)
         {

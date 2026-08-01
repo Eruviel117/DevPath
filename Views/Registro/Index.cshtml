@@ -2,48 +2,93 @@
 
 @{
     ViewData["Title"] = "Registros de Avance";
+    var lista = Model.OrderByDescending(r => r.Fecha).ToList();
+    var totalCount = lista.Count;
+    var estaSemanaCount = lista.Count(r => r.Fecha >= DateTime.Now.AddDays(-7));
+    var habilidadesDistintas = lista.Select(r => r.HabilidadId).Distinct().Count();
 }
 
-<h2>Registros de Avance</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Registros de Avance</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nuevo Registro
+    </a>
+</div>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">+ Nuevo Registro</a>
-</p>
+<!-- Resumen rápido -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#e7ecff; color:#3355ff;">
+                <i class="bi bi-clipboard-check"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@totalCount</p>
+                <p class="devpath-stat-label">Total</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#fff3cd; color:#997404;">
+                <i class="bi bi-calendar-week"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@estaSemanaCount</p>
+                <p class="devpath-stat-label">Esta semana</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4">
+        <div class="devpath-stat-card">
+            <div class="devpath-stat-icon" style="background-color:#d1f7e0; color:#16A34A;">
+                <i class="bi bi-bullseye"></i>
+            </div>
+            <div>
+                <p class="devpath-stat-number">@habilidadesDistintas</p>
+                <p class="devpath-stat-label">Habilidades con avance</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-@if (!Model.Any())
+@if (!lista.Any())
 {
-    <div class="alert alert-info">
-        Todavía no hay registros de avance.
-        <a asp-action="Create">Agrega tu primer registro</a>.
+    <div class="devpath-empty">
+        <div class="devpath-empty-icon"><i class="bi bi-pencil-square"></i></div>
+        <p class="devpath-empty-title">Todavía no hay registros de avance</p>
+        <p class="devpath-empty-text">Anota lo que vas aprendiendo para llevar seguimiento de tu progreso.</p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Agrega tu primer registro
+        </a>
     </div>
 }
 else
 {
     <div class="row g-3">
-        @foreach (var item in Model)
+        @foreach (var item in lista)
         {
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header d-flex justify-content-between
-                        align-items-center"
-                         style="background-color: #002060; color: white;">
-                        <span class="fw-bold">
-                             @item.Habilidad?.Titulo
-                        </span>
-                        <small>
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm devpath-hover-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="devpath-stat-icon devpath-stat-icon-sm" style="background-color:#e7ecff; color:#3355ff;">
+                                <i class="bi bi-bullseye"></i>
+                            </span>
+                            <h6 class="card-title mb-0">@item.Habilidad?.Titulo</h6>
+                        </div>
+                        <p class="card-text small">@item.Nota</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-clock-history"></i>
                             @item.Fecha.ToString("dd/MM/yyyy HH:mm")
                         </small>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">@item.Nota</p>
-                    </div>
-                    <div class="card-footer bg-white border-0">
-                        <a asp-action="Edit" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-primary">Editar</a>
-                        <a asp-action="Details" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-secondary">Ver</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        <div>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </div>
                     </div>
                 </div>
             </div>

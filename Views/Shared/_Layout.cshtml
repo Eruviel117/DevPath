@@ -1,100 +1,55 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DevPath</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DevPath.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DevPath</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Areas" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Areas" asp-action="Index">Áreas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Habilidad" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Habilidad" asp-action="Index">Habilidades</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Recurso" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Recurso" asp-action="Index">Recursos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Registro" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Registro" asp-action="Index">Registros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Estadisticas" ? "active fw-bold" : "text-dark")"
-                               asp-controller="Estadisticas" asp-action="Index">Estadísticas</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto">
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">
-                                    👤 @User.Identity.Name
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout"
-                                      method="post" style="display:inline;">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit"
-                                            class="btn btn-outline-danger btn-sm mt-1">
-                                        Cerrar sesión
-                                    </button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account" asp-action="Login">
-                                    Iniciar sesión
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark"
-                                   asp-controller="Account" asp-action="Register">
-                                    Registrarse
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+    <div class="devpath-shell">
+
+        <!-- Sidebar (escritorio) -->
+        <aside class="devpath-sidebar d-none d-md-flex flex-column">
+            @await Html.PartialAsync("_Sidebar")
+        </aside>
+
+        <!-- Sidebar (móvil, se abre como panel lateral) -->
+        <div class="offcanvas offcanvas-start d-md-none devpath-sidebar-offcanvas" tabindex="-1" id="devpathSidebarOffcanvas">
+            <div class="offcanvas-header">
+                <span class="fw-bold devpath-brand-text">DevPath</span>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <div class="offcanvas-body p-0 d-flex flex-column">
+                @await Html.PartialAsync("_Sidebar")
+            </div>
+        </div>
+
+        <div class="devpath-content">
+            <!-- Barra superior solo en móvil -->
+            <div class="devpath-mobile-topbar d-md-none">
+                <button class="btn btn-outline-secondary btn-sm" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#devpathSidebarOffcanvas"
+                        aria-controls="devpathSidebarOffcanvas">
+                    ☰
+                </button>
+                <span class="fw-bold" style="color:#002060;">DevPath</span>
+            </div>
+
+            <main role="main" class="devpath-main">
+                @RenderBody()
+            </main>
+
+            <footer class="devpath-footer text-muted">
+                &copy; 2026 - DevPath - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </footer>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - DevPath - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

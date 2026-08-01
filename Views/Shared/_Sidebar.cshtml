@@ -1,0 +1,61 @@
+@{
+    string ActiveClass(string controllerName) =>
+        ViewContext.RouteData.Values["controller"]?.ToString() == controllerName
+            ? "devpath-nav-link active" : "devpath-nav-link";
+}
+
+<div class="devpath-sidebar-brand">
+    <a asp-controller="Home" asp-action="Index" class="text-decoration-none d-flex align-items-center gap-2">
+        <span class="devpath-logo-badge"><i class="bi bi-diagram-3"></i></span>
+        <span class="devpath-brand-text">DevPath</span>
+    </a>
+</div>
+
+<nav class="devpath-sidebar-nav">
+    <a class="@ActiveClass("Home")" asp-controller="Home" asp-action="Index">
+        <i class="bi bi-house-door"></i> Inicio
+    </a>
+    <a class="@ActiveClass("Areas")" asp-controller="Areas" asp-action="Index">
+        <i class="bi bi-folder2"></i> Áreas
+    </a>
+    <a class="@ActiveClass("Habilidad")" asp-controller="Habilidad" asp-action="Index">
+        <i class="bi bi-bullseye"></i> Habilidades
+    </a>
+    <a class="@ActiveClass("Recurso")" asp-controller="Recurso" asp-action="Index">
+        <i class="bi bi-journal-bookmark"></i> Recursos
+    </a>
+    <a class="@ActiveClass("Registro")" asp-controller="Registro" asp-action="Index">
+        <i class="bi bi-clipboard-check"></i> Registros
+    </a>
+    <a class="@ActiveClass("Estadisticas")" asp-controller="Estadisticas" asp-action="Index">
+        <i class="bi bi-bar-chart"></i> Estadísticas
+    </a>
+</nav>
+
+<div class="devpath-user-block">
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        var nombre = User.Identity.Name ?? "?";
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="devpath-avatar">@nombre.Substring(0, 1).ToUpper()</span>
+            <span class="small text-truncate devpath-user-email" style="max-width: 150px;" title="@nombre">
+                @nombre
+            </span>
+        </div>
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </button>
+        </form>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-sm w-100 mb-2">
+            Iniciar sesión
+        </a>
+        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-sm w-100">
+            Registrarse
+        </a>
+    }
+</div>
