@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using System.Security.Claims;
 
 namespace DevPath.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AreasApiController : ControllerBase
     {
         private readonly DevPathContext _context;
@@ -15,18 +18,23 @@ namespace DevPath.Controllers.Api
             _context = context;
         }
 
+        private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
         // GET: api/AreasApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Area>>> GetAreas()
         {
-            return await _context.Areas.ToListAsync();
+            return await _context.Areas
+                .Where(a => a.UserId == CurrentUserId)
+                .ToListAsync();
         }
 
         // GET: api/AreasApi/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Area>> GetArea(int id)
         {
-            var area = await _context.Areas.FindAsync(id);
+            var area = await _context.Areas
+                .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
 
             if (area == null)
             {
@@ -40,6 +48,7 @@ namespace DevPath.Controllers.Api
         [HttpPost]
         public async Task<ActionResult<Area>> PostArea(Area area)
         {
+            area.UserId = CurrentUserId;
             _context.Areas.Add(area);
             await _context.SaveChangesAsync();
 
@@ -55,6 +64,16 @@ namespace DevPath.Controllers.Api
                 return BadRequest();
             }
 
+            var existente = await _context.Areas
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
+
+            if (existente == null)
+            {
+                return NotFound();
+            }
+
+            area.UserId = CurrentUserId;
             _context.Entry(area).State = EntityState.Modified;
 
             try
@@ -63,7 +82,7 @@ namespace DevPath.Controllers.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Areas.Any(e => e.Id == id))
+                if (!_context.Areas.Any(e => e.Id == id && e.UserId == CurrentUserId))
                 {
                     return NotFound();
                 }
@@ -80,7 +99,9 @@ namespace DevPath.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArea(int id)
         {
-            var area = await _context.Areas.FindAsync(id);
+            var area = await _context.Areas
+                .FirstOrDefaultAsync(a => a.Id == id && a.UserId == CurrentUserId);
+
             if (area == null)
             {
                 return NotFound();

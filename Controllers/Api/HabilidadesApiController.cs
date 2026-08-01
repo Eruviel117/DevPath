@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DevPath.Models;
+using System.Security.Claims;
 
 namespace DevPath.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HabilidadesApiController : ControllerBase
     {
         private readonly DevPathContext _context;
@@ -15,12 +18,15 @@ namespace DevPath.Controllers.Api
             _context = context;
         }
 
+        private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
         // GET: api/HabilidadesApi
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Habilidad>>> GetHabilidades()
         {
             return await _context.Habilidades
                 .Include(h => h.Area)
+                .Where(h => h.UserId == CurrentUserId)
                 .ToListAsync();
         }
 
@@ -30,7 +36,7 @@ namespace DevPath.Controllers.Api
         {
             var habilidad = await _context.Habilidades
                 .Include(h => h.Area)
-                .FirstOrDefaultAsync(h => h.Id == id);
+                .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
 
             if (habilidad == null)
             {
@@ -44,6 +50,15 @@ namespace DevPath.Controllers.Api
         [HttpPost]
         public async Task<ActionResult<Habilidad>> PostHabilidad(Habilidad habilidad)
         {
+            var areaValida = await _context.Areas
+                .AnyAsync(a => a.Id == habilidad.AreaId && a.UserId == CurrentUserId);
+
+            if (!areaValida)
+            {
+                return BadRequest("El área indicada no existe o no pertenece al usuario actual.");
+            }
+
+            habilidad.UserId = CurrentUserId;
             _context.Habilidades.Add(habilidad);
             await _context.SaveChangesAsync();
 
@@ -59,6 +74,24 @@ namespace DevPath.Controllers.Api
                 return BadRequest();
             }
 
+            var existente = await _context.Habilidades
+                .AsNoTracking()
+                .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
+
+            if (existente == null)
+            {
+                return NotFound();
+            }
+
+            var areaValida = await _context.Areas
+                .AnyAsync(a => a.Id == habilidad.AreaId && a.UserId == CurrentUserId);
+
+            if (!areaValida)
+            {
+                return BadRequest("El área indicada no existe o no pertenece al usuario actual.");
+            }
+
+            habilidad.UserId = CurrentUserId;
             _context.Entry(habilidad).State = EntityState.Modified;
 
             try
@@ -67,7 +100,7 @@ namespace DevPath.Controllers.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Habilidades.Any(e => e.Id == id))
+                if (!_context.Habilidades.Any(e => e.Id == id && e.UserId == CurrentUserId))
                 {
                     return NotFound();
                 }
@@ -84,7 +117,9 @@ namespace DevPath.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHabilidad(int id)
         {
-            var habilidad = await _context.Habilidades.FindAsync(id);
+            var habilidad = await _context.Habilidades
+                .FirstOrDefaultAsync(h => h.Id == id && h.UserId == CurrentUserId);
+
             if (habilidad == null)
             {
                 return NotFound();
