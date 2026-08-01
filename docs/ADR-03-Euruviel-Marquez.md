@@ -1,4 +1,4 @@
-# ADR-02: Estilo arquitectónico de DevPath
+# ADR-03: Estilo arquitectónico de DevPath
 
 | Campo  | Valor |
 |--------|-------|
